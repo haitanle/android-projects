@@ -9,14 +9,18 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class JsonUtils {
 
+
+    /* Parses json data and return Sandwich object
+    * json example -  {"name":{"mainName":"Chivito","alsoKnownAs":[]},"placeOfOrigin":"Uruguay","description":"Chivito is a national dish of Uruguay, It is a thin slice of tender cooked beef steak (churrasco), with mozzarella, tomatoes, mayonnaise, black or green olives, and commonly also bacon, fried or hard-boiled eggs and ham, served as a sandwich in a bun, often accompanied by French fried potatoes. Other ingredients, such as red beets, peas, grilled or pan-fried red peppers, and slices of cucumber, may be added.","image":"https://upload.wikimedia.org/wikipedia/commons/4/48/Chivito1.jpg","ingredients":["Bun","Churrasco beef","Bacon","Fried or hard-boiled eggs","Ham","Black or green olives","Mozzarella","Tomatoes","Mayonnaise"]}
+    * Input: String JSON
+    * Return: Sandwich object
+    */
     public static Sandwich parseSandwichJson(String json) {
        Log.v(JsonUtils.class.getSimpleName(),json);
-
 
        try {
            JSONObject dish = new JSONObject(json);
@@ -51,14 +55,12 @@ public class JsonUtils {
            sandwich.setDescription(description);
 
            return sandwich;
+
        }catch (JSONException e){
            e.printStackTrace();
        }
-
 
        return null;
     }
 }
 
-
-// {"name":{"mainName":"Chivito","alsoKnownAs":[]},"placeOfOrigin":"Uruguay","description":"Chivito is a national dish of Uruguay, It is a thin slice of tender cooked beef steak (churrasco), with mozzarella, tomatoes, mayonnaise, black or green olives, and commonly also bacon, fried or hard-boiled eggs and ham, served as a sandwich in a bun, often accompanied by French fried potatoes. Other ingredients, such as red beets, peas, grilled or pan-fried red peppers, and slices of cucumber, may be added.","image":"https://upload.wikimedia.org/wikipedia/commons/4/48/Chivito1.jpg","ingredients":["Bun","Churrasco beef","Bacon","Fried or hard-boiled eggs","Ham","Black or green olives","Mozzarella","Tomatoes","Mayonnaise"]}

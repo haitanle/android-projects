@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void launchDetailActivity(int position) {
         Intent intent = new Intent(this, DetailActivity.class);
-        Log.v(MainActivity.class.getSimpleName(),"****Position****"+ position);
+        Log.v(MainActivity.class.getSimpleName(),"****ArrayAdapter position: "+ position);
 
         intent.putExtra(DetailActivity.EXTRA_POSITION, position);
         startActivity(intent);

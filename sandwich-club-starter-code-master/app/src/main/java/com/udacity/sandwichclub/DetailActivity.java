@@ -17,10 +17,26 @@ public class DetailActivity extends AppCompatActivity {
     public static final String EXTRA_POSITION = "extra_position";
     private static final int DEFAULT_POSITION = -1;
 
+    TextView mAlsoKnownAsTextView;
+
+    TextView mPlaceOfOriginTextView;
+
+    TextView mIngredientsTextView;
+
+    TextView mDescriptionTextView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+
+        mAlsoKnownAsTextView = (TextView) findViewById(R.id.also_known_tv);
+
+        mPlaceOfOriginTextView = (TextView) findViewById(R.id.origin_tv);
+
+        mIngredientsTextView = (TextView) findViewById(R.id.ingredients_tv);
+
+        mDescriptionTextView = (TextView) findViewById(R.id.description_tv);
 
         ImageView ingredientsIv = findViewById(R.id.image_iv);
 
@@ -45,8 +61,6 @@ public class DetailActivity extends AppCompatActivity {
             return;
         }
 
-        Log.v(DetailActivity.class.getSimpleName(), "*****HERE*****");
-
         populateUI(sandwich);
         Picasso.with(this)
                 .load(sandwich.getImage())
@@ -62,20 +76,16 @@ public class DetailActivity extends AppCompatActivity {
 
     private void populateUI(Sandwich sandwich) {
 
-        TextView mAlsoKnownAsTextView = (TextView) findViewById(R.id.also_known_tv);
         for (String alsoKnownAs: sandwich.getAlsoKnownAs()){
             mAlsoKnownAsTextView.append(alsoKnownAs+"\n");
         }
 
-        TextView mPlaceOfOriginTextView = (TextView) findViewById(R.id.origin_tv);
         mPlaceOfOriginTextView.setText(sandwich.getPlaceOfOrigin());
 
-        TextView mIngredientsTextView = (TextView) findViewById(R.id.ingredients_tv);
         for (String ingredient: sandwich.getIngredients()){
             mIngredientsTextView.append(ingredient+"\n");
         }
 
-        TextView mDescriptionTextView = (TextView) findViewById(R.id.description_tv);
         mDescriptionTextView.setText(sandwich.getDescription());
     }
 }
