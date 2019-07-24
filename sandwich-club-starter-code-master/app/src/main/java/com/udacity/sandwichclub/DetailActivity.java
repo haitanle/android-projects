@@ -77,13 +77,13 @@ public class DetailActivity extends AppCompatActivity {
     private void populateUI(Sandwich sandwich) {
 
         for (String alsoKnownAs: sandwich.getAlsoKnownAs()){
-            mAlsoKnownAsTextView.append(alsoKnownAs+"\n");
+            mAlsoKnownAsTextView.append(alsoKnownAs.concat("\n"));
         }
 
         mPlaceOfOriginTextView.setText(sandwich.getPlaceOfOrigin());
 
         for (String ingredient: sandwich.getIngredients()){
-            mIngredientsTextView.append(ingredient+"\n");
+            mIngredientsTextView.append(ingredient.concat("\n"));
         }
 
         mDescriptionTextView.setText(sandwich.getDescription());
