@@ -8,14 +8,27 @@ import android.widget.ImageView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.json.JSONObject;
+
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.PosterViewHolder> {
+
+    private JSONObject movieList;
 
     private Movie mMovieItem;
 
     private Movie[] moviesList;
 
-    public MovieAdapter(Movie movieItem){
-        mMovieItem = movieItem;
+//    public JSONObject getMovieList() {
+//        return movieList;
+//    }
+
+//    public void setMovieList(Movie[] moviesList) {
+//        this.moviesList = moviesList;
+//    }
+
+
+    public MovieAdapter(Movie[] moviesList){
+        this.moviesList = moviesList;
     }
 
     @Override
