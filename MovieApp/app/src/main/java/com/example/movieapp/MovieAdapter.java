@@ -1,7 +1,6 @@
 package com.example.movieapp;
 
 import android.content.Context;
-import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,10 +12,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.PosterViewHo
 
     private Movie mMovieItem;
 
+    private Movie[] moviesList;
+
     public MovieAdapter(Movie movieItem){
         mMovieItem = movieItem;
     }
-
 
     @Override
     public PosterViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType){
@@ -36,7 +36,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.PosterViewHo
 
     @Override
     public int getItemCount(){
-        return 1;
+        if (moviesList == null){
+            return 0;
+        }
+        return moviesList.length;
     }
 
 

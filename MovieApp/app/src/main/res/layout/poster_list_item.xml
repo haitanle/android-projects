@@ -11,5 +11,4 @@
         android:text="Movie Poster"
         android:textSize="30sp"/>
 
-
 </FrameLayout>
