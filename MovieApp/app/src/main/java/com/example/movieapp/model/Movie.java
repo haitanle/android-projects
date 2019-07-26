@@ -1,17 +1,18 @@
-package com.example.movieapp;
+package com.example.movieapp.model;
 
 public class Movie {
 
-    public Movie(String title, String imageUrl, String synopsis, String userRating, String releaseDate) {
+    public Movie(String title, String imagePath, String synopsis, String userRating, String releaseDate) {
+
         this.title = title;
-        this.imageUrl = imageUrl;
+        this.imagePath = imagePath;
         this.synopsis = synopsis;
         this.userRating = userRating;
         this.releaseDate = releaseDate;
     }
 
     private String title;
-    private String imageUrl;
+    private String imagePath;
     private String synopsis;
     private String userRating;
     private String releaseDate;
@@ -25,11 +26,11 @@ public class Movie {
     }
 
     public String getImageUrl() {
-        return imageUrl;
+        return imagePath;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImageUrl(String imagePath) {
+        this.imagePath = imagePath;
     }
 
     public String getSynopsis() {
@@ -57,3 +58,4 @@ public class Movie {
     }
 
 }
+

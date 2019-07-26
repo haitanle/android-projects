@@ -1,6 +1,7 @@
 package com.example.movieapp;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,27 +9,25 @@ import android.widget.ImageView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.json.JSONObject;
+import com.example.movieapp.model.Movie;
+import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.PosterViewHolder> {
 
-    private JSONObject movieList;
+    private ArrayList<Movie> moviesList;
 
-    private Movie mMovieItem;
+    public ArrayList<Movie> getMoviesList() {
+        return moviesList;
+    }
 
-    private Movie[] moviesList;
-
-//    public JSONObject getMovieList() {
-//        return movieList;
-//    }
-
-//    public void setMovieList(Movie[] moviesList) {
-//        this.moviesList = moviesList;
-//    }
-
-
-    public MovieAdapter(Movie[] moviesList){
+    public void setMoviesList(ArrayList<Movie> moviesList) {
         this.moviesList = moviesList;
+    }
+
+
+    public MovieAdapter(){
     }
 
     @Override
@@ -45,6 +44,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.PosterViewHo
 
     @Override
     public void onBindViewHolder(PosterViewHolder holder, int position){
+        Movie movie = getMoviesList().get(position);
+        Log.d(MovieAdapter.class.getSimpleName(), "BIND--------"+movie.getImageUrl());
+        holder.bind("http://image.tmdb.org/t/p/w780//"+movie.getImageUrl());
     }
 
     @Override
@@ -52,7 +54,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.PosterViewHo
         if (moviesList == null){
             return 0;
         }
-        return moviesList.length;
+        return getMoviesList().size();
     }
 
 
@@ -66,8 +68,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.PosterViewHo
         }
 
         public void bind(String imgUrl){
-            //todo: parse url string
-            //listItemImageView.setImageURI(imgUrl);
+            Picasso.get().load(imgUrl).into(listItemImageView);
         }
     }
 }
