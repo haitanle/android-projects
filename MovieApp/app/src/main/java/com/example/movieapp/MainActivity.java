@@ -5,11 +5,13 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.example.movieapp.model.Movie;
 
@@ -26,17 +28,19 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Scanner;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MovieAdapter.ListItemClickListener {
 
     // private final String BASE_URL = "http://api.themoviedb.org/3/movie/now_playing?primary_release_date.gte=2019-07-11&primary_release_date.lte=2019-07-25";
     private final String BASE_URL = "http://api.themoviedb.org";
 
-    private final String API_KEY = "[API_KEY]";
+    private final String API_KEY = "";
     private final String API_REGION = "us";
     private final String PATH_NOW_PLAING = "3/movie/now_playing";
 
     private MovieAdapter movieAdapter;
     private RecyclerView mPosterList;
+
+    private Toast mToast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         mPosterList.setLayoutManager(layoutManager);
         mPosterList.setHasFixedSize(true);
 
-        movieAdapter = new MovieAdapter();
+        movieAdapter = new MovieAdapter(this);
         mPosterList.setAdapter(movieAdapter);
 
     }
@@ -158,5 +162,16 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return null;
+    }
+
+    @Override
+    public void onListItemClick(Movie movie){
+        Context context = MainActivity.this;
+        if (mToast != null) mToast.cancel();
+
+        String movieTitle = movie.getTitle();
+
+        mToast = Toast.makeText(context,"Movie: "+movieTitle, Toast.LENGTH_LONG);
+        mToast.show();
     }
 }
