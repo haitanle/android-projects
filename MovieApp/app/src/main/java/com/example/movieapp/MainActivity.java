@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -28,7 +30,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Scanner;
 
-public class MainActivity extends AppCompatActivity implements MovieAdapter.ListItemClickListener {
+public class MainActivity extends AppCompatActivity implements MovieAdapter.ListItemClickListener{
 
     // private final String BASE_URL = "http://api.themoviedb.org/3/movie/now_playing?primary_release_date.gte=2019-07-11&primary_release_date.lte=2019-07-25";
     private final String BASE_URL = "http://api.themoviedb.org";
@@ -167,11 +169,17 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
     @Override
     public void onListItemClick(Movie movie){
         Context context = MainActivity.this;
-        if (mToast != null) mToast.cancel();
 
         String movieTitle = movie.getTitle();
 
-        mToast = Toast.makeText(context,"Movie: "+movieTitle, Toast.LENGTH_LONG);
-        mToast.show();
+//        mToast = Toast.makeText(context,"Movie: "+movieTitle, Toast.LENGTH_LONG);
+//        mToast.show();
+
+        Class destinationActivity = DetailActivity.class;
+
+        Intent detailActivityIntent = new Intent(context, destinationActivity);
+        detailActivityIntent.putExtra(Intent.EXTRA_TEXT, movie);
+
+        startActivity(detailActivityIntent);
     }
 }
