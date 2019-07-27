@@ -17,8 +17,11 @@ import java.util.ArrayList;
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.PosterViewHolder> {
 
     private final ListItemClickListener mOnClickListener;
-
     private ArrayList<Movie> moviesList;
+
+    public MovieAdapter(ListItemClickListener clickListener){
+        mOnClickListener = clickListener;
+    }
 
     public ArrayList<Movie> getMoviesList() {
         return moviesList;
@@ -32,15 +35,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.PosterViewHo
         void onListItemClick(Movie movie);
     }
 
-
-    public MovieAdapter(ListItemClickListener clickListener){
-        mOnClickListener = clickListener;
-    }
-
-
     @Override
     public PosterViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType){
         Context context = viewGroup.getContext();
+
         int layoutIdForListItem = R.layout.poster_list_item;
         LayoutInflater inflater = LayoutInflater.from(context);
         boolean shouldAttachToParentImmediately = false;
@@ -54,6 +52,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.PosterViewHo
     public void onBindViewHolder(PosterViewHolder holder, int position){
         Movie movie = getMoviesList().get(position);
         Log.d(MovieAdapter.class.getSimpleName(), "BIND--------"+movie.getImageUrl());
+
         holder.bind("http://image.tmdb.org/t/p/w780//"+movie.getImageUrl());
     }
 
@@ -64,7 +63,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.PosterViewHo
         }
         return getMoviesList().size();
     }
-
 
     class PosterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 

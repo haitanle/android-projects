@@ -42,8 +42,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
     private MovieAdapter movieAdapter;
     private RecyclerView mPosterList;
 
-    private Toast mToast;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,16 +49,14 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
 
         makeMovieDbSearchQuery();
 
-        mPosterList = (RecyclerView) findViewById(R.id.rv_posters);
-
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
 
+        mPosterList = (RecyclerView) findViewById(R.id.rv_posters);
         mPosterList.setLayoutManager(layoutManager);
         mPosterList.setHasFixedSize(true);
 
         movieAdapter = new MovieAdapter(this);
         mPosterList.setAdapter(movieAdapter);
-
     }
 
     public void makeMovieDbSearchQuery(){
@@ -92,8 +88,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
             String searchQueryResult = null;
             searchQueryResult = getResponseFromHttpURL(searchUrl);
 
-            Log.d(MainActivity.class.getSimpleName(), "HERE!-----------"+searchUrl);
-            Log.d(MainActivity.class.getSimpleName(), searchQueryResult);
+            Log.d(MainActivity.class.getSimpleName(), "Getting API data from URL: "+searchUrl);
+            Log.d(MainActivity.class.getSimpleName(), "API's JSON data results: "+searchQueryResult);
             return searchQueryResult;
         }
 
@@ -104,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
 
             ArrayList<Movie> movieList = new ArrayList<>();
 
-            Log.d(MainActivity.class.getSimpleName(), "THERE!-----------");
+            Log.d(MainActivity.class.getSimpleName(), "Starting onPostExecute - set API data to Movie object");
 
             try {
                 json = new JSONObject(queryResults);
@@ -128,18 +124,18 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
 
                 movieAdapter.setMoviesList(movieList);
                 movieAdapter.notifyDataSetChanged();
-                Log.d(MainActivity.class.getSimpleName(), "DONE!-----------");
+                Log.d(MainActivity.class.getSimpleName(), "Finished setting movie list from API");
 
 
             }catch(JSONException e){
                 e.printStackTrace();
             }
-
-
-
         }
     }
 
+    /*
+    Retrieves data from API using HTTPURLConnection
+     */
     public static String getResponseFromHttpURL(URL url){
 
         HttpURLConnection urlConnection = null;
@@ -169,12 +165,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
     @Override
     public void onListItemClick(Movie movie){
         Context context = MainActivity.this;
-
-        String movieTitle = movie.getTitle();
-
-//        mToast = Toast.makeText(context,"Movie: "+movieTitle, Toast.LENGTH_LONG);
-//        mToast.show();
-
         Class destinationActivity = DetailActivity.class;
 
         Intent detailActivityIntent = new Intent(context, destinationActivity);
