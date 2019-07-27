@@ -11,6 +11,9 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -36,8 +39,12 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
     private final String BASE_URL = "http://api.themoviedb.org";
 
     private final String API_KEY = "";
+    private final String API_PATH = "3/discover/movie";
     private final String API_REGION = "us";
-    private final String PATH_NOW_PLAING = "3/movie/now_playing";
+    private final String API_LANGUAGE = "en-US";
+    private final String API_SORT_BY_POPULARITY = "popularity.desc";
+    private final String API_SORT_BY_TOP_RATED = "vote_average.desc";
+    private final String API_RELEASE_YEAR = "2019";
 
     private MovieAdapter movieAdapter;
     private RecyclerView mPosterList;
@@ -47,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        makeMovieDbSearchQuery();
+        makeMovieDbSearchQuery(API_SORT_BY_POPULARITY);
 
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
 
@@ -59,12 +66,15 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
         mPosterList.setAdapter(movieAdapter);
     }
 
-    public void makeMovieDbSearchQuery(){
+    public void makeMovieDbSearchQuery(String sortBy){
 
         // http://api.themoviedb.org/3/movie/popular?api_key=[KEY]
         Uri builtUri = Uri.parse(BASE_URL).buildUpon()
-                .path(PATH_NOW_PLAING)
+                .path(API_PATH)
                 .appendQueryParameter("region", API_REGION)
+                .appendQueryParameter("language", API_LANGUAGE)
+                .appendQueryParameter("sort_by",sortBy) //vote_average.desc  popularity.desc
+                .appendQueryParameter("primary_release_year",API_RELEASE_YEAR)
                 .appendQueryParameter("api_key",API_KEY)
                 .build();
 
@@ -172,4 +182,25 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
 
         startActivity(detailActivityIntent);
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        if (item.getItemId() == R.id.action_sort_popular){
+            makeMovieDbSearchQuery(API_SORT_BY_POPULARITY);
+            return true;
+        }
+        else if( item.getItemId() == R.id.action_sort_topRated){
+            makeMovieDbSearchQuery(API_SORT_BY_TOP_RATED);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 }
