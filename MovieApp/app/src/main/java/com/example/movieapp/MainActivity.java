@@ -27,7 +27,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.net.HttpURLConnection;
+import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
+import java.net.Socket;
+import java.net.SocketAddress;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -93,6 +96,11 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
 
         @Override
         protected String doInBackground(URL... urls){
+
+            if (!isOnline()){
+                return "There is no internet connection!";
+            }
+
             URL searchUrl = urls[0];
 
             String searchQueryResult = null;
@@ -201,6 +209,19 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public boolean isOnline() {
+        try {
+            int timeoutMs = 1500;
+            Socket sock = new Socket();
+            SocketAddress sockaddr = new InetSocketAddress("8.8.8.8", 53);
+
+            sock.connect(sockaddr, timeoutMs);
+            sock.close();
+
+            return true;
+        } catch (IOException e) { return false; }
     }
 
 }
