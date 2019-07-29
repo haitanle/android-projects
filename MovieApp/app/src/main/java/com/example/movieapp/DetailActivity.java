@@ -16,6 +16,8 @@ import java.io.Serializable;
 
 public class DetailActivity extends AppCompatActivity {
 
+    private final String URL_MOVIE_POSTER_SMALL = "http://image.tmdb.org/t/p/w185//";
+
     private TextView mTitleTextView;
     private TextView mSynopsisTextView;
     private ImageView mPosterImageView;
@@ -37,7 +39,7 @@ public class DetailActivity extends AppCompatActivity {
         mSynopsisTextView.setText(movie.getSynopsis());
 
         mPosterImageView = (ImageView) findViewById(R.id.iv_poster_thumbnail);
-        Picasso.get().load("http://image.tmdb.org/t/p/w185//"+movie.getImageUrl()).into(mPosterImageView);
+        Picasso.get().load(URL_MOVIE_POSTER_SMALL+movie.getImageUrl()).into(mPosterImageView);
 
         mRatingTextView = (TextView) findViewById(R.id.tv_user_rating);
         mRatingTextView.setText(movie.getUserRating());

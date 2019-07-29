@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        makeMovieDbSearchQuery(API_SORT_BY_POPULARITY);
+        makeMovieDbRequest(API_SORT_BY_POPULARITY);
 
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
 
@@ -69,14 +69,17 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
         mPosterList.setAdapter(movieAdapter);
     }
 
-    public void makeMovieDbSearchQuery(String sortBy){
+    /*
+    Perform MovieDB api request
+    @Parameter String sortBy - the query parameter to sort the results
+     */
+    public void makeMovieDbRequest(String sortBy){
 
-        // http://api.themoviedb.org/3/movie/popular?api_key=[KEY]
         Uri builtUri = Uri.parse(BASE_URL).buildUpon()
                 .path(API_PATH)
                 .appendQueryParameter("region", API_REGION)
                 .appendQueryParameter("language", API_LANGUAGE)
-                .appendQueryParameter("sort_by",sortBy) //vote_average.desc  popularity.desc
+                .appendQueryParameter("sort_by",sortBy)
                 .appendQueryParameter("primary_release_year",API_RELEASE_YEAR)
                 .appendQueryParameter("api_key",API_KEY)
                 .build();
@@ -116,8 +119,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
 
             JSONObject json = null;
 
-            ArrayList<Movie> movieList = new ArrayList<>();
-
             Log.d(MainActivity.class.getSimpleName(), "Starting onPostExecute - set API data to Movie object");
 
             try {
@@ -125,25 +126,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
 
                 JSONArray results = json.getJSONArray("results");
 
-                for (int i = 0; i < results.length(); i++){
-                    Log.d(MainActivity.class.getSimpleName(), results.getJSONObject(i).get("title").toString());
-
-                    JSONObject movieObj = results.getJSONObject(i);
-
-                    String title = movieObj.get("title").toString();
-                    String posterPath = movieObj.get("poster_path").toString();
-                    String synopsis = movieObj.get("overview").toString();
-                    String userRating = movieObj.get("vote_average").toString();
-                    String releaseDate = movieObj.get("release_date").toString();
-
-                    Movie movie = new Movie(title,posterPath, synopsis, userRating, releaseDate);
-                    movieList.add(movie);
-                }
-
-                movieAdapter.setMoviesList(movieList);
-                movieAdapter.notifyDataSetChanged();
-                Log.d(MainActivity.class.getSimpleName(), "Finished setting movie list from API");
-
+                setToMovieListObject(results);
 
             }catch(JSONException e){
                 e.printStackTrace();
@@ -153,6 +136,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
 
     /*
     Retrieves data from API using HTTPURLConnection
+    @Parameter URL url - URL for API request
+    @Return String - results from API
      */
     public static String getResponseFromHttpURL(URL url){
 
@@ -180,6 +165,39 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
         return null;
     }
 
+    /*
+    Set API's request data to Adapter's Movie object
+    @Parameter JSONArray results - data from API
+     */
+    private void setToMovieListObject(JSONArray results){
+
+        ArrayList<Movie> movieList = new ArrayList<>();
+        try {
+
+            for (int i = 0; i < results.length(); i++) {
+                Log.d(MainActivity.class.getSimpleName(), results.getJSONObject(i).get("title").toString());
+
+                JSONObject movieObj = results.getJSONObject(i);
+
+                String title = movieObj.get("title").toString();
+                String posterPath = movieObj.get("poster_path").toString();
+                String synopsis = movieObj.get("overview").toString();
+                String userRating = movieObj.get("vote_average").toString();
+                String releaseDate = movieObj.get("release_date").toString();
+
+                Movie movie = new Movie(title, posterPath, synopsis, userRating, releaseDate);
+                movieList.add(movie);
+            }
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+
+        movieAdapter.setMoviesList(movieList);
+        movieAdapter.notifyDataSetChanged();
+        Log.d(MainActivity.class.getSimpleName(), "Finished setting movie list from API");
+
+    }
+
     @Override
     public void onListItemClick(Movie movie){
         Context context = MainActivity.this;
@@ -201,16 +219,20 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         if (item.getItemId() == R.id.action_sort_popular){
-            makeMovieDbSearchQuery(API_SORT_BY_POPULARITY);
+            makeMovieDbRequest(API_SORT_BY_POPULARITY);
             return true;
         }
         else if( item.getItemId() == R.id.action_sort_topRated){
-            makeMovieDbSearchQuery(API_SORT_BY_TOP_RATED);
+            makeMovieDbRequest(API_SORT_BY_TOP_RATED);
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    /*
+    Function checks for an internet connection using Google's server
+    @Return boolean isOnline - results true/false
+     */
     public boolean isOnline() {
         try {
             int timeoutMs = 1500;

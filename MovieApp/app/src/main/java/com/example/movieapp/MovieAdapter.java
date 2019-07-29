@@ -16,6 +16,8 @@ import java.util.ArrayList;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.PosterViewHolder> {
 
+    private final String URL_POSTER_IMG_LARGE = "http://image.tmdb.org/t/p/w780/";
+
     private final ListItemClickListener mOnClickListener;
     private ArrayList<Movie> moviesList;
 
@@ -53,7 +55,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.PosterViewHo
         Movie movie = getMoviesList().get(position);
         Log.d(MovieAdapter.class.getSimpleName(), "BIND--------"+movie.getImageUrl());
 
-        holder.bind("http://image.tmdb.org/t/p/w780//"+movie.getImageUrl());
+        holder.bind(URL_POSTER_IMG_LARGE+movie.getImageUrl());
     }
 
     @Override
