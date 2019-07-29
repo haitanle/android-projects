@@ -38,10 +38,9 @@ import java.util.Scanner;
 
 public class MainActivity extends AppCompatActivity implements MovieAdapter.ListItemClickListener{
 
-    // private final String BASE_URL = "http://api.themoviedb.org/3/movie/now_playing?primary_release_date.gte=2019-07-11&primary_release_date.lte=2019-07-25";
     private final String BASE_URL = "http://api.themoviedb.org";
 
-    private final String API_KEY = "e4da10679254ee5d37b6f371a66acccf";
+    private final String API_KEY = "";
     private final String API_PATH_POPULAR= "3/movie/popular";
     private final String API_PATH_TOP_RATED = "3/movie/top_rated";
     private final String API_REGION = "us";
