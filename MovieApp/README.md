@@ -4,8 +4,8 @@ Movie App displays the latest movies from 2019 taken from MovieDB API. Movies ca
 
 ## To Run
 
-Import Movie App project in Android Studio, using File > Import Project. Add the API_KEY found to final variable API_KEY. Run the app. 
+Import Movie App project in Android Studio, using File > Import Project. Add the API_KEY found in Review's note to final variable API_KEY in MainActivity.java file. Run the app. 
 
-## To use
+## To Use
 
-Click on movie poster to view a detailed view of the movie, information includes user rating, release date, and synopsis of the movie. 
+Click on movie poster to view a detailed view of the movie. Information includes user rating, release date, and synopsis of the movie. 

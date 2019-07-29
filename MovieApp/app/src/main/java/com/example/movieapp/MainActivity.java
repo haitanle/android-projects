@@ -41,12 +41,11 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
     // private final String BASE_URL = "http://api.themoviedb.org/3/movie/now_playing?primary_release_date.gte=2019-07-11&primary_release_date.lte=2019-07-25";
     private final String BASE_URL = "http://api.themoviedb.org";
 
-    private final String API_KEY = "";
-    private final String API_PATH = "3/discover/movie";
+    private final String API_KEY = "e4da10679254ee5d37b6f371a66acccf";
+    private final String API_PATH_POPULAR= "3/movie/popular";
+    private final String API_PATH_TOP_RATED = "3/movie/top_rated";
     private final String API_REGION = "us";
     private final String API_LANGUAGE = "en-US";
-    private final String API_SORT_BY_POPULARITY = "popularity.desc";
-    private final String API_SORT_BY_TOP_RATED = "vote_average.desc";
     private final String API_RELEASE_YEAR = "2019";
 
     private MovieAdapter movieAdapter;
@@ -57,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        makeMovieDbRequest(API_SORT_BY_POPULARITY);
+        makeMovieDbRequest(API_PATH_POPULAR);
 
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
 
@@ -76,10 +75,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
     public void makeMovieDbRequest(String sortBy){
 
         Uri builtUri = Uri.parse(BASE_URL).buildUpon()
-                .path(API_PATH)
+                .path(sortBy)
                 .appendQueryParameter("region", API_REGION)
                 .appendQueryParameter("language", API_LANGUAGE)
-                .appendQueryParameter("sort_by",sortBy)
                 .appendQueryParameter("primary_release_year",API_RELEASE_YEAR)
                 .appendQueryParameter("api_key",API_KEY)
                 .build();
@@ -219,11 +217,11 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         if (item.getItemId() == R.id.action_sort_popular){
-            makeMovieDbRequest(API_SORT_BY_POPULARITY);
+            makeMovieDbRequest(API_PATH_POPULAR);
             return true;
         }
         else if( item.getItemId() == R.id.action_sort_topRated){
-            makeMovieDbRequest(API_SORT_BY_TOP_RATED);
+            makeMovieDbRequest(API_PATH_TOP_RATED);
             return true;
         }
         return super.onOptionsItemSelected(item);
