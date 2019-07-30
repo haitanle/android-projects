@@ -16,7 +16,7 @@ import java.io.Serializable;
 
 public class DetailActivity extends AppCompatActivity {
 
-    private final String URL_MOVIE_POSTER_SMALL = "http://image.tmdb.org/t/p/w185//";
+    private final String URL_MOVIE_POSTER_SMALL = "https://image.tmdb.org/t/p/w185//";
 
     private TextView mTitleTextView;
     private TextView mSynopsisTextView;

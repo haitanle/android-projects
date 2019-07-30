@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.PosterViewHolder> {
 
-    private final String URL_POSTER_IMG_LARGE = "http://image.tmdb.org/t/p/w780/";
+    private final String URL_POSTER_IMG_LARGE = "https://image.tmdb.org/t/p/w780/";
 
     private final ListItemClickListener mOnClickListener;
     private ArrayList<Movie> moviesList;

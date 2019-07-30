@@ -38,7 +38,7 @@ import java.util.Scanner;
 
 public class MainActivity extends AppCompatActivity implements MovieAdapter.ListItemClickListener{
 
-    private final String BASE_URL = "http://api.themoviedb.org";
+    private final String BASE_URL = "https://api.themoviedb.org";
 
     private final String API_KEY = "";
     private final String API_PATH_POPULAR= "3/movie/popular";
