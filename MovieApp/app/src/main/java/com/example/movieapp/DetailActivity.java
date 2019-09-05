@@ -2,6 +2,7 @@ package com.example.movieapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
@@ -46,6 +47,12 @@ public class DetailActivity extends AppCompatActivity {
 
         mReleaseDateTextView = (TextView) findViewById(R.id.tv_release_date);
         mReleaseDateTextView.setText(movie.getReleaseDate());
+
+        ActionBar actionBar = this.getActionBar();
+
+        if (actionBar != null){
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
     }
 }

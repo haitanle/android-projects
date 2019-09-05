@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
 
     private final String BASE_URL = "https://api.themoviedb.org";
 
-    private final String API_KEY = "";
+    private final String API_KEY = "e4da10679254ee5d37b6f371a66acccf";
     private final String API_PATH_POPULAR= "3/movie/popular";
     private final String API_PATH_TOP_RATED = "3/movie/top_rated";
     private final String API_REGION = "us";
@@ -75,8 +75,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
 
         Uri builtUri = Uri.parse(BASE_URL).buildUpon()
                 .path(sortBy)
-                .appendQueryParameter("region", API_REGION)
-                .appendQueryParameter("language", API_LANGUAGE)
+                //.appendQueryParameter("region", API_REGION)
+                //.appendQueryParameter("language", API_LANGUAGE)
                 .appendQueryParameter("primary_release_year",API_RELEASE_YEAR)
                 .appendQueryParameter("api_key",API_KEY)
                 .build();
