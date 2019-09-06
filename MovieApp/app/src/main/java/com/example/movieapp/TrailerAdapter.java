@@ -12,6 +12,8 @@ import java.util.ArrayList;
 
 public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerViewHolder> {
 
+    private final ListItemClickListener mOnClickListener;
+
     private ArrayList<String> movieTrailers;
 
     public ArrayList<String> getMovieTrailers() {
@@ -20,6 +22,15 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerV
 
     public void setMovieTrailers(ArrayList<String> movieTrailers) {
         this.movieTrailers = movieTrailers;
+    }
+
+    public interface ListItemClickListener{
+        void onListItemClick(String string);
+    }
+
+
+    public TrailerAdapter(ListItemClickListener clickListener){
+        mOnClickListener = clickListener;
     }
 
     @Override
@@ -56,6 +67,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerV
         public TrailerViewHolder(View itemView){
             super(itemView);
             listItemTrailerView = (TextView) itemView.findViewById(R.id.tv_trailer_id);
+            itemView.setOnClickListener(this);
         }
 
         public void bind(String movieTrailerTitle){
@@ -64,7 +76,9 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerV
 
         @Override
         public void onClick(View view) {
-
+            int clickPosition = getAdapterPosition();
+            String key = getMovieTrailers().get(clickPosition);
+            mOnClickListener.onListItemClick(key);
         }
     }
 

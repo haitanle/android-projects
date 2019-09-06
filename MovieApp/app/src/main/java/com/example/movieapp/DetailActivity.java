@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ActionBar;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Network;
 import android.net.Uri;
@@ -32,7 +33,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class DetailActivity extends AppCompatActivity {
+public class DetailActivity extends AppCompatActivity implements TrailerAdapter.ListItemClickListener{
 
     private final String URL_MOVIE_POSTER_SMALL = "https://image.tmdb.org/t/p/w185//";
     private final String TRAILER_QUERY_PATH_PT1 = "https://api.themoviedb.org/3/movie/";
@@ -80,7 +81,7 @@ public class DetailActivity extends AppCompatActivity {
         mTrailerList.setLayoutManager(layoutManager);
         mTrailerList.setHasFixedSize(true);
 //
-        mTrailerAdapter = new TrailerAdapter();
+        mTrailerAdapter = new TrailerAdapter(this);
         mTrailerList.setAdapter(mTrailerAdapter);
 //
         ActionBar actionBar = this.getActionBar();
@@ -151,6 +152,20 @@ public class DetailActivity extends AppCompatActivity {
             }catch(JSONException e){
                 e.printStackTrace();
             }
+        }
+    }
+
+    @Override
+    public void onListItemClick(String trailerKey) {
+
+        String url = "https://www.youtube.com/watch?v="+trailerKey;
+
+        Uri builtUri = Uri.parse(url);
+
+        Intent intent = new Intent(Intent.ACTION_VIEW, builtUri);
+
+        if(intent.resolveActivity(getPackageManager()) != null){
+            startActivity(intent);
         }
     }
 }
