@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,6 +20,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.PosterViewHo
     private final String URL_POSTER_IMG_LARGE = "https://image.tmdb.org/t/p/w780/";
 
     private final ListItemClickListener mOnClickListener;
+
     private ArrayList<Movie> moviesList;
 
     public MovieAdapter(ListItemClickListener clickListener){

@@ -76,6 +76,28 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10sp"/>
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/trailer_list_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </androidx.recyclerview.widget.RecyclerView>
+
+
+        <!--<include-->
+            <!--layout="@layout/movie_trailer_list"-->
+            <!--/>-->
+
     </LinearLayout>
+
+    <!--<androidx.recyclerview.widget.RecyclerView-->
+        <!--android:id="@+id/rv_trailer"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent">-->
+
+        <!--<include-->
+            <!--layout="@layout/movie_trailer_list"-->
+            <!--&gt;</include>-->
+
+    <!--</androidx.recyclerview.widget.RecyclerView>-->
 
 </FrameLayout>

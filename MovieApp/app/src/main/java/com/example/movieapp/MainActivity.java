@@ -40,9 +40,12 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
 
     private final String BASE_URL = "https://api.themoviedb.org";
 
+
+
     private final String API_KEY = "e4da10679254ee5d37b6f371a66acccf";
     private final String API_PATH_POPULAR= "3/movie/popular";
     private final String API_PATH_TOP_RATED = "3/movie/top_rated";
+    private final String API_PATH_TRAILER = "movies/{id}/videos";
     private final String API_REGION = "us";
     private final String API_LANGUAGE = "en-US";
     private final String API_RELEASE_YEAR = "2019";
@@ -176,13 +179,14 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
 
                 JSONObject movieObj = results.getJSONObject(i);
 
+                String movieApiId = movieObj.get("id").toString();
                 String title = movieObj.get("title").toString();
                 String posterPath = movieObj.get("poster_path").toString();
                 String synopsis = movieObj.get("overview").toString();
                 String userRating = movieObj.get("vote_average").toString();
                 String releaseDate = movieObj.get("release_date").toString();
 
-                Movie movie = new Movie(title, posterPath, synopsis, userRating, releaseDate);
+                Movie movie = new Movie(movieApiId, title, posterPath, synopsis, userRating, releaseDate);
                 movieList.add(movie);
             }
         }catch (JSONException e){

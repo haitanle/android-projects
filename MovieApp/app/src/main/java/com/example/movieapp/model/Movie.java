@@ -4,8 +4,9 @@ import java.io.Serializable;
 
 public class Movie implements Serializable {
 
-    public Movie(String title, String imagePath, String synopsis, String userRating, String releaseDate) {
+    public Movie(String movieApiID, String title, String imagePath, String synopsis, String userRating, String releaseDate) {
 
+        this.movieApiID = movieApiID;
         this.title = title;
         this.imagePath = imagePath;
         this.synopsis = synopsis;
@@ -13,11 +14,16 @@ public class Movie implements Serializable {
         this.releaseDate = releaseDate;
     }
 
+    private String movieApiID;
     private String title;
     private String imagePath;
     private String synopsis;
     private String userRating;
     private String releaseDate;
+
+    public String getMovieApiID() {
+        return movieApiID;
+    }
 
     public String getTitle() {
         return title;
