@@ -139,11 +139,11 @@ public class DetailActivity extends AppCompatActivity {
                 for (int i = 0; i< result.length(); i++){
                     JSONObject trailerObj = result.getJSONObject(i);
 
-                    String trailerTitle = trailerObj.get("name").toString();
+                    String trailerKey = trailerObj.get("key").toString();
 
-                    Log.d(MainActivity.class.getSimpleName(), "Trailer Name---"+trailerTitle);
+                    Log.d(MainActivity.class.getSimpleName(), "Trailer key---"+trailerKey);
 
-                    trailerList.add(trailerTitle);
+                    trailerList.add(trailerKey);
                 }
                 mTrailerAdapter.setMovieTrailers(trailerList);
                 mTrailerAdapter.notifyDataSetChanged();
