@@ -46,10 +46,11 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
     private TextView mReleaseDateTextView;
     private TextView mTrailerTv;
 
-    private ArrayList<String> trailers;
-
     private TrailerAdapter mTrailerAdapter;
     private RecyclerView mTrailerList;
+
+    private ReviewAdapter mReviewAdapter;
+    private RecyclerView mReviewList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +84,17 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
 //
         mTrailerAdapter = new TrailerAdapter(this);
         mTrailerList.setAdapter(mTrailerAdapter);
+
+        getReviewList(movie.getMovieApiID());
+
+        layoutManager = new LinearLayoutManager(this);
+        mReviewList = (RecyclerView) findViewById(R.id.review_list_recyclerView);
+        mReviewList.setLayoutManager(layoutManager);
+        mReviewList.setHasFixedSize(true);
+//
+        mReviewAdapter = new ReviewAdapter();
+        mReviewList.setAdapter(mReviewAdapter);
+
 //
         ActionBar actionBar = this.getActionBar();
 
@@ -166,6 +178,69 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
 
         if(intent.resolveActivity(getPackageManager()) != null){
             startActivity(intent);
+        }
+    }
+
+    private void getReviewList(String movieId){
+
+        String reviewQueryPath = "https://api.themoviedb.org/3/movie/"+movieId+"/reviews?language=en-US&api_key=e4da10679254ee5d37b6f371a66acccf";
+
+        Uri builtUri = Uri.parse(reviewQueryPath).buildUpon().build();
+
+        URL url = null;
+        try {
+            url = new URL(builtUri.toString());
+        }catch (MalformedURLException e){
+            e.printStackTrace();
+        }
+
+        Log.d(MainActivity.class.getSimpleName(), "PATH TRAILER-----"+builtUri.toString());
+        new ReviewQueryTask().execute(url);
+    }
+
+    public class ReviewQueryTask extends AsyncTask<URL, Void, String> {
+
+        @Override
+        protected String doInBackground(URL... urls) {
+
+            URL reviewQueryUrl = urls[0];
+
+            String searchQueryResults = null;
+            searchQueryResults = NetworkUtil.getResponseFromHttpURL(reviewQueryUrl);
+
+            Log.d(DetailActivity.class.getSimpleName(), "searchQueryResults"+searchQueryResults);
+            return searchQueryResults;
+        }
+
+        @Override
+        protected void onPostExecute(String queryResults){
+
+            JSONObject json = null;
+
+            Log.d(MainActivity.class.getSimpleName(), "Starting onPostExecute - for trailer app");
+
+            try {
+                json = new JSONObject(queryResults);
+
+                JSONArray result = json.getJSONArray("results");
+
+                ArrayList<String> reviewList = new ArrayList<>();
+
+                for (int i = 0; i< result.length(); i++){
+                    JSONObject trailerObj = result.getJSONObject(i);
+
+                    String trailerKey = trailerObj.get("content").toString();
+
+                    Log.d(MainActivity.class.getSimpleName(), "comment---"+trailerKey);
+
+                    reviewList.add(trailerKey);
+                }
+                mReviewAdapter.setReviewsList(reviewList);
+                mReviewAdapter.notifyDataSetChanged();
+
+            }catch(JSONException e){
+                e.printStackTrace();
+            }
         }
     }
 }
