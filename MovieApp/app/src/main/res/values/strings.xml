@@ -4,4 +4,6 @@
     <string name="sort_popular">Popularity</string>
 
     <string name="sort_topRated">Top Rated</string>
+
+    <string name="trailer_label">Trailers</string>
 </resources>
