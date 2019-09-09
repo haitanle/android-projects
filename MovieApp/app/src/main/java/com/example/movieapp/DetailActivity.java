@@ -18,6 +18,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.movieapp.database.AppDatabase;
+import com.example.movieapp.database.FavoriteEntry;
 import com.example.movieapp.model.Movie;
 import com.squareup.picasso.Picasso;
 
@@ -56,13 +58,15 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
 
     private ImageView mStarImageV;
 
+    private AppDatabase mDb;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
         Intent intent = getIntent();
-        Movie movie = (Movie) intent.getSerializableExtra(Intent.EXTRA_TEXT);
+        final Movie movie = (Movie) intent.getSerializableExtra(Intent.EXTRA_TEXT);
 
         mTitleTextView = (TextView) findViewById(R.id.tv_movieTitle);
         mTitleTextView.setText(movie.getTitle());
@@ -101,6 +105,8 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
 
         mStarImageV = (ImageView) findViewById(R.id.star_image_view);
 
+        mDb = AppDatabase.getInstance(getApplicationContext());
+
         mStarImageV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -110,6 +116,9 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
                     mStarImageV.setSelected(false);
                 }else{
                     mStarImageV.setSelected(true);
+
+                    FavoriteEntry favoriteEntry = new FavoriteEntry(movie.getMovieApiID(), movie.getTitle());
+                    mDb.favoriteDao().insertFavorite(favoriteEntry);
                 }
             }
         });

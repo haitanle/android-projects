@@ -17,6 +17,8 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.example.movieapp.database.AppDatabase;
+import com.example.movieapp.database.FavoriteEntry;
 import com.example.movieapp.model.Movie;
 
 import org.json.JSONArray;
@@ -34,6 +36,7 @@ import java.net.SocketAddress;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Scanner;
 
 public class MainActivity extends AppCompatActivity implements MovieAdapter.ListItemClickListener{
@@ -53,10 +56,14 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
     private MovieAdapter movieAdapter;
     private RecyclerView mPosterList;
 
+    private AppDatabase mDb;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mDb = AppDatabase.getInstance(getApplicationContext());
 
         makeMovieDbRequest(API_PATH_POPULAR);
 
@@ -70,10 +77,26 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
         mPosterList.setAdapter(movieAdapter);
     }
 
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+
+        ArrayList<Movie> favoriteMovieList = new ArrayList<>();
+
+        List<FavoriteEntry> favoriteEntryList = mDb.favoriteDao().loadAllFavorites();
+
+        for (FavoriteEntry favoriteEntry: favoriteEntryList){
+            Movie movie = new Movie(favoriteEntry.getMovieId(), favoriteEntry.getMovieTitle(), null, null, null, null);
+            favoriteMovieList.add(movie);
+        }
+
+        movieAdapter.setMoviesList(favoriteMovieList);
+    }
+
     /*
-    Perform MovieDB api request
-    @Parameter String sortBy - the query parameter to sort the results
-     */
+        Perform MovieDB api request
+        @Parameter String sortBy - the query parameter to sort the results
+         */
     public void makeMovieDbRequest(String sortBy){
 
         Uri builtUri = Uri.parse(BASE_URL).buildUpon()
