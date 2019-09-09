@@ -7,11 +7,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.net.Network;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -51,6 +53,8 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
 
     private ReviewAdapter mReviewAdapter;
     private RecyclerView mReviewList;
+
+    private ImageView mStarImageV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +99,21 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         mReviewAdapter = new ReviewAdapter();
         mReviewList.setAdapter(mReviewAdapter);
 
+        mStarImageV = (ImageView) findViewById(R.id.star_image_view);
+
+        mStarImageV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mStarImageV.setBackground(getResources().getDrawable(R.drawable.star_selector));
+                // mStarImageV.setSelected(true);
+                if (mStarImageV.isSelected()){
+                    mStarImageV.setSelected(false);
+                }else{
+                    mStarImageV.setSelected(true);
+                }
+            }
+        });
+
 //
         ActionBar actionBar = this.getActionBar();
 
@@ -104,6 +123,10 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
 
     }
 
+    /**
+     * Function to call AysncTask for movie trailers
+     * @param movieId movie id to retrieve trailers
+     */
     private void makeTrailerUri(String movieId){
 
         String movieTrailerQuery = TRAILER_QUERY_PATH_PT1+movieId+TRAILER_QUERY_PATH_PT2;
@@ -181,6 +204,10 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         }
     }
 
+    /**
+     * Method to call AsyncTask for movie reviews
+     * @param movieId id of the movie
+     */
     private void getReviewList(String movieId){
 
         String reviewQueryPath = "https://api.themoviedb.org/3/movie/"+movieId+"/reviews?language=en-US&api_key=e4da10679254ee5d37b6f371a66acccf";
