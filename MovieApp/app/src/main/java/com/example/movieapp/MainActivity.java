@@ -1,6 +1,9 @@
 package com.example.movieapp;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,6 +20,7 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.example.movieapp.database.FavoriteEntry;
 import com.example.movieapp.model.Movie;
 
 import org.json.JSONArray;
@@ -34,13 +38,12 @@ import java.net.SocketAddress;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Scanner;
 
 public class MainActivity extends AppCompatActivity implements MovieAdapter.ListItemClickListener{
 
     private final String BASE_URL = "https://api.themoviedb.org";
-
-
 
     private final String API_KEY = "e4da10679254ee5d37b6f371a66acccf";
     private final String API_PATH_POPULAR= "3/movie/popular";
@@ -53,10 +56,26 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
     private MovieAdapter movieAdapter;
     private RecyclerView mPosterList;
 
+    private FavoriteViewModel mFavoriteViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        RecyclerView recyclerView = findViewById(R.id.favorite_recycleView);
+        final FavoriteListAdapter adapter = new FavoriteListAdapter(this);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
+
+        mFavoriteViewModel = ViewModelProviders.of(this).get(FavoriteViewModel.class);
+
+        mFavoriteViewModel.getAllFavorites().observe(this, new Observer<List<FavoriteEntry>>() {
+            @Override
+            public void onChanged(@Nullable List<FavoriteEntry> favoriteEntries) {
+                adapter.setFavorites(favoriteEntries);
+            }
+        });
 
         makeMovieDbRequest(API_PATH_POPULAR);
 
@@ -68,6 +87,15 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
 
         movieAdapter = new MovieAdapter(this);
         mPosterList.setAdapter(movieAdapter);
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if ( requestCode == 1 && resultCode == RESULT_OK){
+            FavoriteEntry favoriteEntry = new FavoriteEntry("1234","Helloooo");
+            mFavoriteViewModel.insert(favoriteEntry);
+        }
     }
 
     /*

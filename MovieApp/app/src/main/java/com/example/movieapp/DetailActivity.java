@@ -106,11 +106,19 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
             public void onClick(View v) {
                 mStarImageV.setBackground(getResources().getDrawable(R.drawable.star_selector));
                 // mStarImageV.setSelected(true);
+                Intent replyIntent = new Intent(DetailActivity.this, MainActivity.class);
+                String movieTitle = "Home Alone";
+
+                replyIntent.putExtra("Movie",movieTitle);
+                setResult(RESULT_OK, replyIntent);
+
                 if (mStarImageV.isSelected()){
                     mStarImageV.setSelected(false);
                 }else{
                     mStarImageV.setSelected(true);
                 }
+
+                startActivity(replyIntent);
             }
         });
 

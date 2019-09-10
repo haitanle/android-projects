@@ -16,11 +16,14 @@ public interface FavoriteDao {
     @Query("Select * from favorite order by movie_title")
     LiveData<List<FavoriteEntry>> loadAllFavorites();
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertFavorite(FavoriteEntry favoriteEntry);
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     void updateFavorite(FavoriteEntry favoriteEntry);
+
+    @Query("Delete from favorite")
+    void deleteAll();
 
     @Delete
     void deleteFavorite(FavoriteEntry favoriteEntry);
