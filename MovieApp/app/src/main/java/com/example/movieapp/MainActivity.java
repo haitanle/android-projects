@@ -17,8 +17,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.example.movieapp.database.FavoriteEntry;
 import com.example.movieapp.model.Movie;
@@ -29,7 +27,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
@@ -37,7 +34,6 @@ import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -76,6 +72,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
                 adapter.setFavorites(favoriteEntries);
             }
         });
+
+// todo:remove       FavoriteEntry favoriteEntry = new FavoriteEntry("1234","Helloooo");
+//        mFavoriteViewModel.insert(favoriteEntry);
 
         makeMovieDbRequest(API_PATH_POPULAR);
 

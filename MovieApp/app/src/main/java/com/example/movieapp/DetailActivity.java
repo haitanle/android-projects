@@ -1,6 +1,7 @@
 package com.example.movieapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,6 +19,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.movieapp.database.FavoriteDao;
+import com.example.movieapp.database.FavoriteEntry;
+import com.example.movieapp.database.FavoriteRoomDatabase;
 import com.example.movieapp.model.Movie;
 import com.squareup.picasso.Picasso;
 
@@ -56,13 +60,15 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
 
     private ImageView mStarImageV;
 
+    private FavoriteViewModel favoriteViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
         Intent intent = getIntent();
-        Movie movie = (Movie) intent.getSerializableExtra(Intent.EXTRA_TEXT);
+        final Movie movie = (Movie) intent.getSerializableExtra(Intent.EXTRA_TEXT);
 
         mTitleTextView = (TextView) findViewById(R.id.tv_movieTitle);
         mTitleTextView.setText(movie.getTitle());
@@ -104,13 +110,13 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         mStarImageV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mStarImageV.setBackground(getResources().getDrawable(R.drawable.star_selector));
+                //mStarImageV.setBackground(getResources().getDrawable(R.drawable.star_selector));
                 // mStarImageV.setSelected(true);
-                Intent replyIntent = new Intent(DetailActivity.this, MainActivity.class);
-                String movieTitle = "Home Alone";
-
-                replyIntent.putExtra("Movie",movieTitle);
-                setResult(RESULT_OK, replyIntent);
+//                Intent replyIntent = new Intent(DetailActivity.this, MainActivity.class);
+//                String movieTitle = "Home Alone 2";
+//
+//                replyIntent.putExtra("Movie",movieTitle);
+//                setResult(RESULT_OK, replyIntent);
 
                 if (mStarImageV.isSelected()){
                     mStarImageV.setSelected(false);
@@ -118,7 +124,11 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
                     mStarImageV.setSelected(true);
                 }
 
-                startActivity(replyIntent);
+                favoriteViewModel = ViewModelProviders.of(DetailActivity.this).get(FavoriteViewModel.class);
+                favoriteViewModel.insert(new FavoriteEntry(movie.getMovieApiID(),movie.getTitle()));
+
+
+                //startActivity(replyIntent);
             }
         });
 
