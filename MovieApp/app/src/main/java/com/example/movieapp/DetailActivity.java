@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import com.example.movieapp.database.FavoriteDao;
 import com.example.movieapp.database.FavoriteEntry;
+import com.example.movieapp.database.FavoriteRoomDatabase;
 import com.example.movieapp.model.Movie;
 import com.squareup.picasso.Picasso;
 
@@ -34,7 +35,6 @@ import org.json.JSONObject;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 public class DetailActivity extends AppCompatActivity implements TrailerAdapter.ListItemClickListener{
 
@@ -60,6 +60,8 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
     private FavoriteViewModel favoriteViewModel;
 
     private FavoriteViewModel mFavoriteViewModel;
+
+    private AddFavoriteViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,18 +110,20 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
 
         mFavoriteViewModel = ViewModelProviders.of(this).get(FavoriteViewModel.class);
 
-        mFavoriteViewModel.getAllFavorites().observe(this, new Observer<List<FavoriteEntry>>() {
-            @Override
-            public void onChanged(@Nullable List<FavoriteEntry> favoriteEntries) {
-               for (FavoriteEntry favoriteEntry: favoriteEntries){
-                   if (favoriteEntry.getApiId().equals(movie.getMovieApiID())){
-                       mStarImageV.setSelected(true);
-                       return;
-                   }
-               }
-               mStarImageV.setSelected(false);
-            }
-        });
+//        mFavoriteViewModel.getAllFavorites().observe(this, new Observer<List<FavoriteEntry>>() {
+//            @Override
+//            public void onChanged(@Nullable List<FavoriteEntry> favoriteEntries) {
+//               for (FavoriteEntry favoriteEntry: favoriteEntries){
+//                   if (favoriteEntry.getApiId().equals(movie.getMovieApiID())){
+//                       mStarImageV.setSelected(true);
+//                       return;
+//                   }
+//               }
+//               mStarImageV.setSelected(false);
+//            }
+//        });
+
+        final FavoriteRoomDatabase mdb = FavoriteRoomDatabase.getDatabase(getApplication());
 
 //        favoriteViewModel = ViewModelProviders.of(DetailActivity.this).get(FavoriteViewModel.class);
 //
@@ -147,6 +151,23 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
 //            mStarImageV.setSelected(true);
 //        }
 
+        AddFavoriteViewModelFactory factory = new AddFavoriteViewModelFactory(mdb,movie.getMovieApiID());
+        viewModel = ViewModelProviders.of(this, factory).get(AddFavoriteViewModel.class);
+
+        viewModel.getFavorite().observe(this, new Observer<FavoriteEntry>() {
+            @Override
+            public void onChanged(FavoriteEntry favoriteEntry) {
+                if (favoriteEntry == null){
+                    mStarImageV.setSelected(false);
+                }else{
+                    mStarImageV.setSelected(true);
+                }
+            }
+        });
+
+//        FavoriteEntry favoriteEntry = mFavoriteViewModel.retrievebyId(movie.getMovieApiID());
+//        mFavoriteViewModel.delete(favoriteEntry);
+
         mStarImageV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -158,13 +179,17 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
 //                replyIntent.putExtra("Movie",movieTitle);
 //                setResult(RESULT_OK, replyIntent);
 
-//                favoriteViewModel = ViewModelProviders.of(DetailActivity.this).get(FavoriteViewModel.class);
-//                LiveData<FavoriteEntry> favoriteEntry = favoriteViewModel.getMovieById(movie.getMovieApiID());
+                //favoriteViewModel = ViewModelProviders.of(DetailActivity.this).get(FavoriteViewModel.class);
+                //LiveData<FavoriteEntry> favoriteEntry = favoriteViewModel.getMovieById(movie.getMovieApiID());
 
                 ImageView favoriteIcon = (ImageView) findViewById(R.id.star_image_view);
                 if (favoriteIcon.isSelected()){
-                    FavoriteEntry favoriteEntry = mFavoriteViewModel.retrievebyId(movie.getMovieApiID());
+
+                    //AddFavoriteViewModelFactory factory = new AddFavoriteViewModelFactory(mdb,movie.getMovieApiID());
+                    FavoriteEntry favoriteEntry = viewModel.getFavorite().getValue();
+
                     mFavoriteViewModel.delete(favoriteEntry);
+                    //favoriteIcon.setSelected(false);
                 }else{
                     FavoriteEntry favoriteMovie = new FavoriteEntry(movie.getMovieApiID(), movie.getTitle());
                     mFavoriteViewModel.insert(favoriteMovie);

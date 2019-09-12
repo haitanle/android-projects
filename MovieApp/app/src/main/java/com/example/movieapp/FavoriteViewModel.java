@@ -35,7 +35,7 @@ public class FavoriteViewModel extends AndroidViewModel {
     }
 
     public FavoriteEntry retrievebyId(String apiId){
-        return mRepository.retrieveId(apiId);
+        return null;
     }
 
     public LiveData<FavoriteEntry> getMovieById(String apiId){

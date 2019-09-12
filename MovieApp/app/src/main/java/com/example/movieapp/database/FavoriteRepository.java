@@ -40,6 +40,7 @@ public class FavoriteRepository {
 
     public LiveData<FavoriteEntry> retrieveId(String apiId){
         new retrieveAysncTask(mFavoriteDao).execute(apiId);
+        return null;
     }
 
     private static class insertAsyncTask extends AsyncTask<FavoriteEntry, Void, Void>{

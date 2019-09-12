@@ -14,9 +14,9 @@ public abstract class FavoriteRoomDatabase extends RoomDatabase {
 
     public abstract FavoriteDao favoriteDao();
 
-    private static volatile FavoriteRoomDatabase INSTANCE;
+    public static volatile FavoriteRoomDatabase INSTANCE;
 
-    static FavoriteRoomDatabase getDatabase(final Context context){
+    public static FavoriteRoomDatabase getDatabase(final Context context){
         if (INSTANCE == null){
             synchronized (FavoriteRoomDatabase.class){
                 if (INSTANCE == null){
