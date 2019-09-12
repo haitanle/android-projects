@@ -24,6 +24,7 @@ import com.example.movieapp.model.Movie;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -50,7 +51,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
     private final String API_RELEASE_YEAR = "2019";
 
     private MovieAdapter movieAdapter;
-    private RecyclerView mPosterList;
+    private FavoriteListAdapter favoriteListAdapter;
+    private RecyclerView recyclerView;
 
     private FavoriteViewModel mFavoriteViewModel;
 
@@ -59,42 +61,30 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        RecyclerView recyclerView = findViewById(R.id.favorite_recycleView);
-        final FavoriteListAdapter adapter = new FavoriteListAdapter(this);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
-
-        mFavoriteViewModel = ViewModelProviders.of(this).get(FavoriteViewModel.class);
-
-        mFavoriteViewModel.getAllFavorites().observe(this, new Observer<List<FavoriteEntry>>() {
-            @Override
-            public void onChanged(@Nullable List<FavoriteEntry> favoriteEntries) {
-                adapter.setFavorites(favoriteEntries);
-            }
-        });
-
-// todo:remove       FavoriteEntry favoriteEntry = new FavoriteEntry("1234","Helloooo");
-//        mFavoriteViewModel.insert(favoriteEntry);
-
         makeMovieDbRequest(API_PATH_POPULAR);
 
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
 
-        mPosterList = (RecyclerView) findViewById(R.id.rv_posters);
-        mPosterList.setLayoutManager(layoutManager);
-        mPosterList.setHasFixedSize(true);
-
+        recyclerView = (RecyclerView) findViewById(R.id.rv_posters);
         movieAdapter = new MovieAdapter(this);
-        mPosterList.setAdapter(movieAdapter);
-    }
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(movieAdapter);
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data){
-        super.onActivityResult(requestCode, resultCode, data);
+        recyclerView.setHasFixedSize(true);
 
-        if ( requestCode == 1 && resultCode == RESULT_OK){
-            FavoriteEntry favoriteEntry = new FavoriteEntry("1234","Helloooo");
-            mFavoriteViewModel.insert(favoriteEntry);
-        }
+        recyclerView = findViewById(R.id.favorite_recycleView);
+        favoriteListAdapter = new FavoriteListAdapter(this);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(favoriteListAdapter);
+
+        mFavoriteViewModel = ViewModelProviders.of(this).get(FavoriteViewModel.class);
+        mFavoriteViewModel.getAllFavorites().observe(this, new Observer<List<FavoriteEntry>>() {
+            @Override
+            public void onChanged(@Nullable List<FavoriteEntry> favoriteEntries) {
+                favoriteListAdapter.setFavorites(favoriteEntries);
+            }
+        });
+
     }
 
     /*

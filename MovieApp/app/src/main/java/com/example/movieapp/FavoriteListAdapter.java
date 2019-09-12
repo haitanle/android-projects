@@ -23,13 +23,6 @@ public class FavoriteListAdapter extends RecyclerView.Adapter<FavoriteListAdapte
         }
     }
 
-    private final LayoutInflater mInfalter;
-    private List<FavoriteEntry> mFavorites;
-
-    FavoriteListAdapter(Context context){
-        mInfalter = LayoutInflater.from(context);
-    }
-
     @Override
     public FavoriteViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
         View itemView = mInfalter.inflate(R.layout.favorite_item, parent, false);
@@ -45,6 +38,14 @@ public class FavoriteListAdapter extends RecyclerView.Adapter<FavoriteListAdapte
             holder.favoriteItemView.setText("No Word");
         }
     }
+
+    private final LayoutInflater mInfalter;
+    private List<FavoriteEntry> mFavorites;
+
+    FavoriteListAdapter(Context context){
+        mInfalter = LayoutInflater.from(context);
+    }
+
 
     void setFavorites(List<FavoriteEntry> favorites){
         mFavorites = favorites;
