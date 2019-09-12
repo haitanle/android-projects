@@ -13,7 +13,7 @@ import java.util.List;
 @Dao
 public interface FavoriteDao {
 
-    @Query("Select * from favorite order by movie_title")
+    @Query("Select * from favorite order by id")
     LiveData<List<FavoriteEntry>> loadAllFavorites();
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
@@ -24,6 +24,9 @@ public interface FavoriteDao {
 
     @Query("Delete from favorite")
     void deleteAll();
+
+    @Query("select * from favorite where api_id =:apiId")
+    LiveData<FavoriteEntry> getMovieById(String apiId);
 
     @Delete
     void deleteFavorite(FavoriteEntry favoriteEntry);

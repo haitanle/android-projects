@@ -14,6 +14,7 @@ public class FavoriteRepository {
 
     private FavoriteDao mFavoriteDao;
     private LiveData<List<FavoriteEntry>> mAllFavorites;
+    private LiveData<FavoriteEntry> mFavoriteMovie;
 
     public FavoriteRepository(Application application){
         FavoriteRoomDatabase db = FavoriteRoomDatabase.getDatabase(application);
@@ -25,8 +26,20 @@ public class FavoriteRepository {
         return mAllFavorites;
     }
 
+    public LiveData<FavoriteEntry> getMovieById(String apiId){
+        return mFavoriteDao.getMovieById(apiId);
+    }
+
     public void insert(FavoriteEntry favoriteEntry){
         new insertAsyncTask(mFavoriteDao).execute(favoriteEntry);
+    }
+
+    public void delete(FavoriteEntry favoriteEntry){
+        new deleteAysncTask(mFavoriteDao).execute(favoriteEntry);
+    }
+
+    public LiveData<FavoriteEntry> retrieveId(String apiId){
+        new retrieveAysncTask(mFavoriteDao).execute(apiId);
     }
 
     private static class insertAsyncTask extends AsyncTask<FavoriteEntry, Void, Void>{
@@ -42,5 +55,36 @@ public class FavoriteRepository {
             mAsyncTaskDao.insertFavorite(params[0]);
             return null;
         }
+    }
+
+    private static class deleteAysncTask extends AsyncTask<FavoriteEntry, Void, Void>{
+
+        private FavoriteDao mAsyncTaskDao;
+
+        deleteAysncTask(FavoriteDao dao){
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(final FavoriteEntry... params){
+            mAsyncTaskDao.deleteFavorite(params[0]);
+            return null;
+        }
+    }
+
+    private static class retrieveAysncTask extends AsyncTask<String, Void, LiveData<FavoriteEntry>>{
+
+        private FavoriteDao mAsyncTaskDao;
+
+        retrieveAysncTask(FavoriteDao dao){
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected LiveData<FavoriteEntry> doInBackground(final String... params){
+            return mAsyncTaskDao.getMovieById(params[0]);
+        }
+
+
     }
 }

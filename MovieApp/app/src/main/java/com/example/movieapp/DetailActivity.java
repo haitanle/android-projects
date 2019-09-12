@@ -1,6 +1,9 @@
 package com.example.movieapp;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,23 +24,17 @@ import android.widget.TextView;
 
 import com.example.movieapp.database.FavoriteDao;
 import com.example.movieapp.database.FavoriteEntry;
-import com.example.movieapp.database.FavoriteRoomDatabase;
 import com.example.movieapp.model.Movie;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Serializable;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.List;
 
 public class DetailActivity extends AppCompatActivity implements TrailerAdapter.ListItemClickListener{
 
@@ -61,6 +58,8 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
     private ImageView mStarImageV;
 
     private FavoriteViewModel favoriteViewModel;
+
+    private FavoriteViewModel mFavoriteViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +90,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         mTrailerList = (RecyclerView) findViewById(R.id.trailer_list_recyclerView);
         mTrailerList.setLayoutManager(layoutManager);
         mTrailerList.setHasFixedSize(true);
-//
+
         mTrailerAdapter = new TrailerAdapter(this);
         mTrailerList.setAdapter(mTrailerAdapter);
 
@@ -101,11 +100,52 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         mReviewList = (RecyclerView) findViewById(R.id.review_list_recyclerView);
         mReviewList.setLayoutManager(layoutManager);
         mReviewList.setHasFixedSize(true);
-//
+
         mReviewAdapter = new ReviewAdapter();
         mReviewList.setAdapter(mReviewAdapter);
 
         mStarImageV = (ImageView) findViewById(R.id.star_image_view);
+
+        mFavoriteViewModel = ViewModelProviders.of(this).get(FavoriteViewModel.class);
+
+        mFavoriteViewModel.getAllFavorites().observe(this, new Observer<List<FavoriteEntry>>() {
+            @Override
+            public void onChanged(@Nullable List<FavoriteEntry> favoriteEntries) {
+               for (FavoriteEntry favoriteEntry: favoriteEntries){
+                   if (favoriteEntry.getApiId().equals(movie.getMovieApiID())){
+                       mStarImageV.setSelected(true);
+                       return;
+                   }
+               }
+               mStarImageV.setSelected(false);
+            }
+        });
+
+//        favoriteViewModel = ViewModelProviders.of(DetailActivity.this).get(FavoriteViewModel.class);
+//
+//        favoriteViewModel.insert(new FavoriteEntry(movie.getMovieApiID(),movie.getTitle()));
+//
+//        LiveData<FavoriteEntry> favoriteEntry = favoriteViewModel.getMovieById(movie.getMovieApiID());
+//
+//        favoriteEntry.observe(this, new Observer<FavoriteEntry>() {
+//
+//            @Override
+//            public void onChanged(@final FavoriteEntry favoriteMovie) {
+//
+//                mReleaseDateTextView.setText(favoriteMovie.getMovieTitle());
+////                if (favoriteMovie == null){
+////                    mStarImageV.setSelected(false);
+////                }else{
+////                    mStarImageV.setSelected(true);
+////                }
+//            }
+//        });
+
+//        if (favoriteEntry == null){
+//            mStarImageV.setSelected(false);
+//        }else{
+//            mStarImageV.setSelected(true);
+//        }
 
         mStarImageV.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,15 +158,32 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
 //                replyIntent.putExtra("Movie",movieTitle);
 //                setResult(RESULT_OK, replyIntent);
 
-                if (mStarImageV.isSelected()){
-                    mStarImageV.setSelected(false);
+//                favoriteViewModel = ViewModelProviders.of(DetailActivity.this).get(FavoriteViewModel.class);
+//                LiveData<FavoriteEntry> favoriteEntry = favoriteViewModel.getMovieById(movie.getMovieApiID());
+
+                ImageView favoriteIcon = (ImageView) findViewById(R.id.star_image_view);
+                if (favoriteIcon.isSelected()){
+                    FavoriteEntry favoriteEntry = mFavoriteViewModel.retrievebyId(movie.getMovieApiID());
+                    mFavoriteViewModel.delete(favoriteEntry);
                 }else{
-                    mStarImageV.setSelected(true);
+                    FavoriteEntry favoriteMovie = new FavoriteEntry(movie.getMovieApiID(), movie.getTitle());
+                    mFavoriteViewModel.insert(favoriteMovie);
                 }
 
-                favoriteViewModel = ViewModelProviders.of(DetailActivity.this).get(FavoriteViewModel.class);
-                favoriteViewModel.insert(new FavoriteEntry(movie.getMovieApiID(),movie.getTitle()));
 
+
+
+
+
+                //mStarImageV.setSelected(true);
+
+//                if (mStarImageV.isSelected()){
+//                    mStarImageV.setSelected(false);
+//                }else{
+//                    mStarImageV.setSelected(true);
+//                }
+
+                // favoriteViewModel.insert(new FavoriteEntry(movie.getMovieApiID(),movie.getTitle()));
 
                 //startActivity(replyIntent);
             }
