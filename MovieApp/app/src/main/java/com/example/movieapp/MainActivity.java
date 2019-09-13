@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
@@ -25,7 +24,6 @@ import com.example.movieapp.model.Movie;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -86,7 +84,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
             @Override
             public void onChanged(@Nullable List<FavoriteEntry> favoriteEntries) {
                 favoriteListAdapter.setFavorites(favoriteEntries);
-                favoriteListAdapter.notifyDataSetChanged();
             }
         });
 
@@ -195,7 +192,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
 
         ArrayList<Movie> movieList = new ArrayList<>();
         try {
-
             for (int i = 0; i < results.length(); i++) {
                 Log.d(MainActivity.class.getSimpleName(), results.getJSONObject(i).get("title").toString());
 

@@ -28,7 +28,6 @@ public class FavoriteListAdapter extends RecyclerView.Adapter<FavoriteListAdapte
     class FavoriteViewHolder extends RecyclerView.ViewHolder{
         private final ImageView favoriteItemView;
 
-
         private FavoriteViewHolder(View itemView){
             super(itemView);
             favoriteItemView = (ImageView) itemView.findViewById(R.id.favorite_iv);
@@ -57,13 +56,12 @@ public class FavoriteListAdapter extends RecyclerView.Adapter<FavoriteListAdapte
            holder.bind("https://image.tmdb.org/t/p/w780"+posterId);
 
         }else{
-            Log.d(FavoriteListAdapter.class.getSimpleName(), "NO IMAGE");
+            Log.e(FavoriteListAdapter.class.getSimpleName(), "Unable to get Poster images");
         }
     }
 
     private final LayoutInflater mInfalter;
     private List<FavoriteEntry> mFavorites;
-    private FavoriteViewHolder mholder;
 
     FavoriteListAdapter(Context context){
         mInfalter = LayoutInflater.from(context);
@@ -127,12 +125,9 @@ public class FavoriteListAdapter extends RecyclerView.Adapter<FavoriteListAdapte
 
             try {
                 json = new JSONObject(queryResults);
-
                 String results = json.getString("poster_path");
 
                 Log.d(FavoriteListAdapter.class.getSimpleName(), "IMAGE POSTER"+results);
-
-                //setUrlToBinder(results);
 
             }catch(JSONException e){
                 e.printStackTrace();
