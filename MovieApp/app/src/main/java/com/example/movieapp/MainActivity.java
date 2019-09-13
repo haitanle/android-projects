@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.example.movieapp.database.FavoriteEntry;
 import com.example.movieapp.model.Movie;
@@ -52,7 +53,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
 
     private MovieAdapter movieAdapter;
     private FavoriteListAdapter favoriteListAdapter;
-    private RecyclerView recyclerView;
+    private RecyclerView movieRecyclerView;
+    private RecyclerView favoriteRecylerView;
 
     private FavoriteViewModel mFavoriteViewModel;
 
@@ -63,25 +65,28 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
 
         makeMovieDbRequest(API_PATH_POPULAR);
 
-        GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
+        GridLayoutManager gridLayoutManagerMovie = new GridLayoutManager(this, 2);
 
-        recyclerView = (RecyclerView) findViewById(R.id.rv_posters);
+        movieRecyclerView = (RecyclerView) findViewById(R.id.rv_posters);
         movieAdapter = new MovieAdapter(this);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(movieAdapter);
+        movieRecyclerView.setLayoutManager(gridLayoutManagerMovie);
+        movieRecyclerView.setAdapter(movieAdapter);
 
-        recyclerView.setHasFixedSize(true);
+        movieRecyclerView.setHasFixedSize(true);
 
-        recyclerView = findViewById(R.id.favorite_recycleView);
+        GridLayoutManager gridLayoutManagerFavorite = new GridLayoutManager(this, 2);
+
+        favoriteRecylerView = (RecyclerView) findViewById(R.id.favorite_recycleView);
         favoriteListAdapter = new FavoriteListAdapter(this);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(favoriteListAdapter);
+        favoriteRecylerView.setLayoutManager(gridLayoutManagerFavorite);
+        favoriteRecylerView.setAdapter(favoriteListAdapter);
 
         mFavoriteViewModel = ViewModelProviders.of(this).get(FavoriteViewModel.class);
         mFavoriteViewModel.getAllFavorites().observe(this, new Observer<List<FavoriteEntry>>() {
             @Override
             public void onChanged(@Nullable List<FavoriteEntry> favoriteEntries) {
                 favoriteListAdapter.setFavorites(favoriteEntries);
+                favoriteListAdapter.notifyDataSetChanged();
             }
         });
 
@@ -237,11 +242,20 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         if (item.getItemId() == R.id.action_sort_popular){
+            movieRecyclerView.setVisibility(View.VISIBLE);
+            favoriteRecylerView.setVisibility(View.GONE);
             makeMovieDbRequest(API_PATH_POPULAR);
             return true;
         }
         else if( item.getItemId() == R.id.action_sort_topRated){
+            movieRecyclerView.setVisibility(View.VISIBLE);
+            favoriteRecylerView.setVisibility(View.GONE);
             makeMovieDbRequest(API_PATH_TOP_RATED);
+            return true;
+        }
+        else if(item.getItemId() == R.id.action_sort_favorite){
+            movieRecyclerView.setVisibility(View.GONE);
+            favoriteRecylerView.setVisibility(View.VISIBLE);
             return true;
         }
         return super.onOptionsItemSelected(item);
