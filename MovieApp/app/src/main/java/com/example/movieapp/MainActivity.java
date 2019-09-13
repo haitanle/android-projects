@@ -66,11 +66,13 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
         GridLayoutManager gridLayoutManagerMovie = new GridLayoutManager(this, 2);
 
         movieRecyclerView = (RecyclerView) findViewById(R.id.rv_posters);
-        movieAdapter = new MovieAdapter(this);
         movieRecyclerView.setLayoutManager(gridLayoutManagerMovie);
+        movieRecyclerView.setHasFixedSize(true);
+
+        movieAdapter = new MovieAdapter(this);
         movieRecyclerView.setAdapter(movieAdapter);
 
-        movieRecyclerView.setHasFixedSize(true);
+
 
         GridLayoutManager gridLayoutManagerFavorite = new GridLayoutManager(this, 2);
 
