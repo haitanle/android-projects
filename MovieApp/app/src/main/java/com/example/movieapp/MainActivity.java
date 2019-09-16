@@ -254,19 +254,19 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         if (item.getItemId() == R.id.action_sort_popular){
-            movieRecyclerView.setVisibility(View.VISIBLE);
+            //movieRecyclerView.setVisibility(View.VISIBLE);
             //favoriteRecylerView.setVisibility(View.GONE);
             makeMovieDbRequest(API_PATH_POPULAR);
             return true;
         }
         else if( item.getItemId() == R.id.action_sort_topRated){
-            movieRecyclerView.setVisibility(View.VISIBLE);
+            // movieRecyclerView.setVisibility(View.VISIBLE);
             //favoriteRecylerView.setVisibility(View.GONE);
-            makeMovieDbRequest(API_PATH_TOP_RATED);
+            //makeMovieDbRequest(API_PATH_TOP_RATED);
             return true;
         }
         else if(item.getItemId() == R.id.action_sort_favorite){
-            movieRecyclerView.setVisibility(View.GONE);
+            // movieRecyclerView.setVisibility(View.GONE);
             //favoriteRecylerView.setVisibility(View.VISIBLE);
             return true;
         }
