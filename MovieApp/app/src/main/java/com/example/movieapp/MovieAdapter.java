@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.PosterViewHolder> {
 
-    private final String URL_POSTER_IMG_LARGE = "https://image.tmdb.org/t/p/w780/";
+    private final String URL_POSTER_IMG_LARGE = "https://image.tmdb.org/t/p/w780";
 
     private final ListItemClickListener mOnClickListener;
 
@@ -68,9 +68,13 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.PosterViewHo
         return getMoviesList().size();
     }
 
+
+    /**
+     * PosterViewHolder is used to post the item on the layout
+     */
     class PosterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        private ImageView listItemImageView;
+        ImageView listItemImageView;
 
         public PosterViewHolder(View itemView){
             super(itemView);

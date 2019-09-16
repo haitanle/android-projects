@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.example.movieapp.database.FavoriteEntry;
 import com.example.movieapp.model.Movie;
@@ -53,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
     private FavoriteListAdapter favoriteListAdapter;
     private RecyclerView movieRecyclerView;
     private RecyclerView favoriteRecylerView;
+    private ArrayList<Movie> movieList;
 
     private FavoriteViewModel mFavoriteViewModel;
 
@@ -63,6 +65,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
 
         makeMovieDbRequest(API_PATH_POPULAR);
 
+        movieAdapter = new MovieAdapter(this);
+
         GridLayoutManager gridLayoutManagerMovie = new GridLayoutManager(this, 2);
 
         movieRecyclerView = (RecyclerView) findViewById(R.id.rv_posters);
@@ -71,7 +75,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
 
         movieAdapter = new MovieAdapter(this);
         movieRecyclerView.setAdapter(movieAdapter);
-
 
 
         GridLayoutManager gridLayoutManagerFavorite = new GridLayoutManager(this, 2);
@@ -92,9 +95,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
     }
 
     /*
-    Perform MovieDB api request
-    @Parameter String sortBy - the query parameter to sort the results
-     */
+        Perform MovieDB api request
+        @Parameter String sortBy - the query parameter to sort the results
+         */
     public void makeMovieDbRequest(String sortBy){
 
         Uri builtUri = Uri.parse(BASE_URL).buildUpon()
@@ -214,6 +217,17 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
         }
 
         movieAdapter.setMoviesList(movieList);
+        this.movieList = movieList;
+
+        GridLayoutManager gridLayoutManagerMovie = new GridLayoutManager(this, 2);
+
+        movieRecyclerView = (RecyclerView) findViewById(R.id.rv_posters);
+        movieRecyclerView.setLayoutManager(gridLayoutManagerMovie);
+        movieRecyclerView.setHasFixedSize(true);
+
+        movieRecyclerView.setAdapter(movieAdapter);
+
+
         movieAdapter.notifyDataSetChanged();
         Log.d(MainActivity.class.getSimpleName(), "Finished setting movie list from API");
 
@@ -241,19 +255,19 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
     public boolean onOptionsItemSelected(MenuItem item){
         if (item.getItemId() == R.id.action_sort_popular){
             movieRecyclerView.setVisibility(View.VISIBLE);
-            favoriteRecylerView.setVisibility(View.GONE);
+            //favoriteRecylerView.setVisibility(View.GONE);
             makeMovieDbRequest(API_PATH_POPULAR);
             return true;
         }
         else if( item.getItemId() == R.id.action_sort_topRated){
             movieRecyclerView.setVisibility(View.VISIBLE);
-            favoriteRecylerView.setVisibility(View.GONE);
+            //favoriteRecylerView.setVisibility(View.GONE);
             makeMovieDbRequest(API_PATH_TOP_RATED);
             return true;
         }
         else if(item.getItemId() == R.id.action_sort_favorite){
             movieRecyclerView.setVisibility(View.GONE);
-            favoriteRecylerView.setVisibility(View.VISIBLE);
+            //favoriteRecylerView.setVisibility(View.VISIBLE);
             return true;
         }
         return super.onOptionsItemSelected(item);
