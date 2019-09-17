@@ -63,27 +63,16 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        makeMovieDbRequest(API_PATH_POPULAR);
-
         movieAdapter = new MovieAdapter(this);
-
         GridLayoutManager gridLayoutManagerMovie = new GridLayoutManager(this, 2);
 
         movieRecyclerView = (RecyclerView) findViewById(R.id.rv_posters);
         movieRecyclerView.setLayoutManager(gridLayoutManagerMovie);
         movieRecyclerView.setHasFixedSize(true);
 
-        movieAdapter = new MovieAdapter(this);
-        movieRecyclerView.setAdapter(movieAdapter);
+        makeMovieDbRequest(API_PATH_POPULAR);
 
-
-        GridLayoutManager gridLayoutManagerFavorite = new GridLayoutManager(this, 2);
-
-        favoriteRecylerView = (RecyclerView) findViewById(R.id.favorite_recycleView);
         favoriteListAdapter = new FavoriteListAdapter(this);
-        favoriteRecylerView.setLayoutManager(gridLayoutManagerFavorite);
-        favoriteRecylerView.setAdapter(favoriteListAdapter);
-
         mFavoriteViewModel = ViewModelProviders.of(this).get(FavoriteViewModel.class);
         mFavoriteViewModel.getAllFavorites().observe(this, new Observer<List<FavoriteEntry>>() {
             @Override
@@ -219,14 +208,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
         movieAdapter.setMoviesList(movieList);
         this.movieList = movieList;
 
-        GridLayoutManager gridLayoutManagerMovie = new GridLayoutManager(this, 2);
-
-        movieRecyclerView = (RecyclerView) findViewById(R.id.rv_posters);
-        movieRecyclerView.setLayoutManager(gridLayoutManagerMovie);
-        movieRecyclerView.setHasFixedSize(true);
-
         movieRecyclerView.setAdapter(movieAdapter);
-
 
         movieAdapter.notifyDataSetChanged();
         Log.d(MainActivity.class.getSimpleName(), "Finished setting movie list from API");
@@ -254,20 +236,15 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         if (item.getItemId() == R.id.action_sort_popular){
-            //movieRecyclerView.setVisibility(View.VISIBLE);
-            //favoriteRecylerView.setVisibility(View.GONE);
             makeMovieDbRequest(API_PATH_POPULAR);
             return true;
         }
         else if( item.getItemId() == R.id.action_sort_topRated){
-            // movieRecyclerView.setVisibility(View.VISIBLE);
-            //favoriteRecylerView.setVisibility(View.GONE);
-            //makeMovieDbRequest(API_PATH_TOP_RATED);
+            makeMovieDbRequest(API_PATH_TOP_RATED);
             return true;
         }
         else if(item.getItemId() == R.id.action_sort_favorite){
-            // movieRecyclerView.setVisibility(View.GONE);
-            //favoriteRecylerView.setVisibility(View.VISIBLE);
+            movieRecyclerView.setAdapter(favoriteListAdapter);
             return true;
         }
         return super.onOptionsItemSelected(item);
