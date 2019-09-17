@@ -142,6 +142,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
                     FavoriteEntry favoriteEntry = viewModel.getFavorite().getValue();
                     mFavoriteViewModel.delete(favoriteEntry);
 
+
                 }else{
                     FavoriteEntry favoriteMovie = new FavoriteEntry(movie.getMovieApiID(), movie.getTitle());
                     mFavoriteViewModel.insert(favoriteMovie);

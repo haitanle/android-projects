@@ -80,7 +80,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
                 favoriteListAdapter.setFavorites(favoriteEntries);
             }
         });
-
     }
 
     /*
@@ -245,6 +244,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
         }
         else if(item.getItemId() == R.id.action_sort_favorite){
             movieRecyclerView.setAdapter(favoriteListAdapter);
+            favoriteListAdapter.notifyDataSetChanged();
+
             return true;
         }
         return super.onOptionsItemSelected(item);
