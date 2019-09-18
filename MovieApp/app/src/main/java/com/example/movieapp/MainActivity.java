@@ -29,6 +29,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
 
     private final String BASE_URL = "https://api.themoviedb.org";
     private final String LIFECYCLE_CALLBACKS_KEY = "callbacks";
+    private final String LIFECYCLE_CALLBACKS_FAVORITE = "favoriteList";
 
     private final String API_KEY = "e4da10679254ee5d37b6f371a66acccf";
     private final String API_PATH_POPULAR= "3/movie/popular";
@@ -74,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
         movieRecyclerView.setLayoutManager(gridLayoutManagerMovie);
         movieRecyclerView.setHasFixedSize(true);
 
-        favoriteListAdapter = new FavoriteListAdapter(this);
+        this.favoriteListAdapter = new FavoriteListAdapter(this);
         mFavoriteViewModel = ViewModelProviders.of(this).get(FavoriteViewModel.class);
 
         if (savedInstanceState != null){
@@ -92,7 +94,16 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
                         break;
                     case "favorite":
                         this.lifecycle_rotation = "favorite";
-                        movieRecyclerView.setAdapter(favoriteListAdapter);
+                        ArrayList<FavoriteEntry> favoriteEntries = savedInstanceState.getParcelableArrayList(LIFECYCLE_CALLBACKS_FAVORITE);
+                        this.favoriteListAdapter.setFavorites(favoriteEntries);
+                        movieRecyclerView.setAdapter(this.favoriteListAdapter);
+
+                        mFavoriteViewModel.getAllFavorites().observe(this, new Observer<List<FavoriteEntry>>() {
+                            @Override
+                            public void onChanged(@Nullable List<FavoriteEntry> favoriteEntries) {
+                                favoriteListAdapter.setFavorites(favoriteEntries);
+                            }
+                        });
                         break;
                 }
             }
@@ -114,6 +125,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
         super.onSaveInstanceState(outState);
         if (this.lifecycle_rotation != null){
             outState.putString(LIFECYCLE_CALLBACKS_KEY, this.lifecycle_rotation);
+            outState.putParcelableArrayList(LIFECYCLE_CALLBACKS_FAVORITE, (ArrayList<FavoriteEntry>) this.favoriteListAdapter.getmFavorites());
         }
     }
 
@@ -125,8 +137,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
 
         Uri builtUri = Uri.parse(BASE_URL).buildUpon()
                 .path(sortBy)
-                //.appendQueryParameter("region", API_REGION)
-                //.appendQueryParameter("language", API_LANGUAGE)
                 .appendQueryParameter("primary_release_year",API_RELEASE_YEAR)
                 .appendQueryParameter("api_key",API_KEY)
                 .build();
@@ -283,7 +293,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
             this.lifecycle_rotation = "favorite";
             movieRecyclerView.setAdapter(favoriteListAdapter);
             favoriteListAdapter.notifyDataSetChanged();
-
             return true;
         }
         return super.onOptionsItemSelected(item);

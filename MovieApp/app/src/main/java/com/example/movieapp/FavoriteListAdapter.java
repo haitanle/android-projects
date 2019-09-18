@@ -72,6 +72,10 @@ public class FavoriteListAdapter extends RecyclerView.Adapter<FavoriteListAdapte
         notifyDataSetChanged();
     }
 
+    public List<FavoriteEntry> getmFavorites() {
+        return mFavorites;
+    }
+
     @Override
     public int getItemCount() {
         if (mFavorites != null) return mFavorites.size();
