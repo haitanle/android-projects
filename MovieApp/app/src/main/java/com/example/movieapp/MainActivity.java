@@ -2,6 +2,7 @@ package com.example.movieapp;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.menu.MenuPresenter;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -41,6 +42,7 @@ import java.util.Scanner;
 public class MainActivity extends AppCompatActivity implements MovieAdapter.ListItemClickListener{
 
     private final String BASE_URL = "https://api.themoviedb.org";
+    private final String LIFECYCLE_CALLBACKS_KEY = "callbacks";
 
     private final String API_KEY = "e4da10679254ee5d37b6f371a66acccf";
     private final String API_PATH_POPULAR= "3/movie/popular";
@@ -56,6 +58,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
     private RecyclerView favoriteRecylerView;
     private ArrayList<Movie> movieList;
 
+    private String lifecycle_rotation;
+
     private FavoriteViewModel mFavoriteViewModel;
 
     @Override
@@ -70,22 +74,53 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
         movieRecyclerView.setLayoutManager(gridLayoutManagerMovie);
         movieRecyclerView.setHasFixedSize(true);
 
-        makeMovieDbRequest(API_PATH_POPULAR);
-
         favoriteListAdapter = new FavoriteListAdapter(this);
         mFavoriteViewModel = ViewModelProviders.of(this).get(FavoriteViewModel.class);
-        mFavoriteViewModel.getAllFavorites().observe(this, new Observer<List<FavoriteEntry>>() {
-            @Override
-            public void onChanged(@Nullable List<FavoriteEntry> favoriteEntries) {
-                favoriteListAdapter.setFavorites(favoriteEntries);
+
+        if (savedInstanceState != null){
+            if (savedInstanceState.containsKey(LIFECYCLE_CALLBACKS_KEY)){
+                String callbackSort = savedInstanceState.getString(LIFECYCLE_CALLBACKS_KEY);
+
+                switch (callbackSort){
+                    case "popular":
+                        this.lifecycle_rotation = "popular";
+                        makeMovieDbRequest(API_PATH_POPULAR);
+                        break;
+                    case "topRated":
+                        this.lifecycle_rotation = "topRated";
+                        makeMovieDbRequest(API_PATH_TOP_RATED);
+                        break;
+                    case "favorite":
+                        this.lifecycle_rotation = "favorite";
+                        movieRecyclerView.setAdapter(favoriteListAdapter);
+                        break;
+                }
             }
-        });
+        }else {
+
+            makeMovieDbRequest(API_PATH_POPULAR);
+
+            mFavoriteViewModel.getAllFavorites().observe(this, new Observer<List<FavoriteEntry>>() {
+                @Override
+                public void onChanged(@Nullable List<FavoriteEntry> favoriteEntries) {
+                    favoriteListAdapter.setFavorites(favoriteEntries);
+                }
+            });
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (this.lifecycle_rotation != null){
+            outState.putString(LIFECYCLE_CALLBACKS_KEY, this.lifecycle_rotation);
+        }
     }
 
     /*
-        Perform MovieDB api request
-        @Parameter String sortBy - the query parameter to sort the results
-         */
+            Perform MovieDB api request
+            @Parameter String sortBy - the query parameter to sort the results
+             */
     public void makeMovieDbRequest(String sortBy){
 
         Uri builtUri = Uri.parse(BASE_URL).buildUpon()
@@ -208,8 +243,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
         this.movieList = movieList;
 
         movieRecyclerView.setAdapter(movieAdapter);
-
         movieAdapter.notifyDataSetChanged();
+
         Log.d(MainActivity.class.getSimpleName(), "Finished setting movie list from API");
 
     }
@@ -235,14 +270,17 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         if (item.getItemId() == R.id.action_sort_popular){
+            this.lifecycle_rotation = "popular";
             makeMovieDbRequest(API_PATH_POPULAR);
             return true;
         }
         else if( item.getItemId() == R.id.action_sort_topRated){
+            this.lifecycle_rotation = "topRated";
             makeMovieDbRequest(API_PATH_TOP_RATED);
             return true;
         }
         else if(item.getItemId() == R.id.action_sort_favorite){
+            this.lifecycle_rotation = "favorite";
             movieRecyclerView.setAdapter(favoriteListAdapter);
             favoriteListAdapter.notifyDataSetChanged();
 
