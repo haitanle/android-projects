@@ -36,7 +36,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
     private final String URL_MOVIE_POSTER_SMALL = "https://image.tmdb.org/t/p/w185//";
     //todo: fix trailer query part1/2
     private final String TRAILER_QUERY_PATH_PT1 = "https://api.themoviedb.org/3/movie/";
-    private final String TRAILER_QUERY_PATH_PT2 = "/videos?language=en-US&api_key=e4da10679254ee5d37b6f371a66acccf";
+    private final String TRAILER_QUERY_PATH_PT2 = "/videos?language=en-US&api_key="+MainActivity.API_KEY;
 
     private TextView mTitleTextView;
     private TextView mSynopsisTextView;
@@ -247,7 +247,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
      */
     private void getReviewList(String movieId){
 
-        String reviewQueryPath = "https://api.themoviedb.org/3/movie/"+movieId+"/reviews?language=en-US&api_key=e4da10679254ee5d37b6f371a66acccf";
+        String reviewQueryPath = "https://api.themoviedb.org/3/movie/"+movieId+"/reviews?language=en-US&api_key="+MainActivity.API_KEY;
 
         Uri builtUri = Uri.parse(reviewQueryPath).buildUpon().build();
 

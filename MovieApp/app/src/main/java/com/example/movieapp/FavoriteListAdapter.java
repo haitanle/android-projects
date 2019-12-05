@@ -49,7 +49,7 @@ public class FavoriteListAdapter extends RecyclerView.Adapter<FavoriteListAdapte
         if (mFavorites != null){
             FavoriteEntry current = mFavorites.get(position);
 
-            String uri = "https://api.themoviedb.org/3/movie/"+current.getApiId()+"?api_key=e4da10679254ee5d37b6f371a66acccf";
+            String uri = "https://api.themoviedb.org/3/movie/"+current.getApiId()+"?api_key="+MainActivity.API_KEY;
 
             String posterId = callForPoster(uri);
 

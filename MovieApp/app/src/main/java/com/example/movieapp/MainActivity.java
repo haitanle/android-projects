@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
     private final String LIFECYCLE_CALLBACKS_KEY = "callbacks";
     private final String LIFECYCLE_CALLBACKS_FAVORITE = "favoriteList";
 
-    private final String API_KEY = "e4da10679254ee5d37b6f371a66acccf";
+    public static final String API_KEY = "";
     private final String API_PATH_POPULAR= "3/movie/popular";
     private final String API_PATH_TOP_RATED = "3/movie/top_rated";
     private final String API_PATH_TRAILER = "movies/{id}/videos";
