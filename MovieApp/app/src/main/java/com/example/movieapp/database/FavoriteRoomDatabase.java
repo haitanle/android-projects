@@ -50,10 +50,6 @@ public abstract class FavoriteRoomDatabase extends RoomDatabase {
         @Override
         protected Void doInBackground(final Void... params){
             mDao.deleteAll();
-//            FavoriteEntry favoriteEntry = new FavoriteEntry("1234", "Home Alone 3");
-//            mDao.insertFavorite(favoriteEntry);
-//            favoriteEntry = new FavoriteEntry("2342", "Test test");
-//            mDao.insertFavorite(favoriteEntry);
             return null;
         }
     }
