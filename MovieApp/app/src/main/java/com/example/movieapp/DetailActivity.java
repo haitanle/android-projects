@@ -198,6 +198,8 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         @Override
         protected void onPostExecute(String queryResults){
 
+            if (queryResults == null) return;
+
             JSONObject json = null;
 
             Log.d(MainActivity.class.getSimpleName(), "Starting onPostExecute - for trailer app");
@@ -279,9 +281,11 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         @Override
         protected void onPostExecute(String queryResults){
 
+            if (queryResults == null) return;
+
             JSONObject json = null;
 
-            Log.d(MainActivity.class.getSimpleName(), "Starting onPostExecute - for trailer app");
+            Log.d(MainActivity.class.getSimpleName(), "Starting onPostExecute - for review");
 
             try {
                 json = new JSONObject(queryResults);
