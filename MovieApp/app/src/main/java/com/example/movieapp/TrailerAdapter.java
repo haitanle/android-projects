@@ -49,7 +49,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerV
     @Override
     public void onBindViewHolder(TrailerViewHolder holder, int position) {
         String movieTrailerTitle = movieTrailers.get(position);
-        holder.bind(String.valueOf("Trailer "+(position+1)));
+        holder.bind("Trailer " + (position + 1));
     }
 
     @Override
@@ -66,7 +66,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerV
 
         public TrailerViewHolder(View itemView){
             super(itemView);
-            listItemTrailerView = (TextView) itemView.findViewById(R.id.tv_trailer_id);
+            listItemTrailerView = itemView.findViewById(R.id.tv_trailer_id);
             itemView.setOnClickListener(this);
         }
 

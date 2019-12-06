@@ -32,7 +32,7 @@ public class FavoriteListAdapter extends RecyclerView.Adapter<FavoriteListAdapte
 
         private FavoriteViewHolder(View itemView){
             super(itemView);
-            favoriteItemView = (ImageView) itemView.findViewById(R.id.favorite_iv);
+            favoriteItemView = itemView.findViewById(R.id.favorite_iv);
             itemView.setOnClickListener(this);
         }
 

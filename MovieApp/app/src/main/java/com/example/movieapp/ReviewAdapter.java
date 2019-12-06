@@ -54,7 +54,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
 
         public ReviewViewHolder(View itemView){
             super(itemView);
-            listItemReviews = (TextView) itemView.findViewById(R.id.review_comment_tv);
+            listItemReviews = itemView.findViewById(R.id.review_comment_tv);
         }
 
         public void bind(String reviewComment){

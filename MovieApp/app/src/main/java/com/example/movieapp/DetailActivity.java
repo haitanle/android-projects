@@ -34,7 +34,6 @@ import java.util.ArrayList;
 public class DetailActivity extends AppCompatActivity implements TrailerAdapter.ListItemClickListener{
 
     private final String URL_MOVIE_POSTER_SMALL = "https://image.tmdb.org/t/p/w185//";
-    //todo: fix trailer query part1/2
     private final String TRAILER_QUERY_PATH_PT1 = "https://api.themoviedb.org/3/movie/";
     private final String TRAILER_QUERY_PATH_PT2 = "/videos?language=en-US&api_key="+MainActivity.API_KEY;
 
@@ -67,27 +66,25 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         Intent intent = getIntent();
         final Movie movie = (Movie) intent.getSerializableExtra(Intent.EXTRA_TEXT);
 
-        //todo: create function to set DetailActivity UI
-        mTitleTextView = (TextView) findViewById(R.id.tv_movieTitle);
+        mTitleTextView = findViewById(R.id.tv_movieTitle);
         mTitleTextView.setText(movie.getTitle());
 
-        mSynopsisTextView = (TextView) findViewById(R.id.tv_synopsis);
+        mSynopsisTextView = findViewById(R.id.tv_synopsis);
         mSynopsisTextView.setText(movie.getSynopsis());
 
-        mPosterImageView = (ImageView) findViewById(R.id.iv_poster_thumbnail);
+        mPosterImageView = findViewById(R.id.iv_poster_thumbnail);
         Picasso.get().load(URL_MOVIE_POSTER_SMALL+movie.getImageUrl()).into(mPosterImageView);
 
-        mRatingTextView = (TextView) findViewById(R.id.tv_user_rating);
+        mRatingTextView = findViewById(R.id.tv_user_rating);
         mRatingTextView.setText(movie.getUserRating());
 
-        mReleaseDateTextView = (TextView) findViewById(R.id.tv_release_date);
+        mReleaseDateTextView = findViewById(R.id.tv_release_date);
         mReleaseDateTextView.setText(movie.getReleaseDate());
 
-        //todo: fix trailer/review reuse code
         makeTrailerUri(movie.getMovieApiID());
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        mTrailerList = (RecyclerView) findViewById(R.id.trailer_list_recyclerView);
+        mTrailerList = findViewById(R.id.trailer_list_recyclerView);
         mTrailerList.setLayoutManager(layoutManager);
         mTrailerList.setHasFixedSize(true);
         mTrailerAdapter = new TrailerAdapter(this);
@@ -96,26 +93,20 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         getReviewList(movie.getMovieApiID());
 
         layoutManager = new LinearLayoutManager(this);
-        mReviewList = (RecyclerView) findViewById(R.id.review_list_recyclerView);
+        mReviewList = findViewById(R.id.review_list_recyclerView);
         mReviewList.setLayoutManager(layoutManager);
         mReviewList.setHasFixedSize(true);
         mReviewAdapter = new ReviewAdapter();
         mReviewList.setAdapter(mReviewAdapter);
 
-        //there has to be some easy way to tie this into the liveData selector
-        mStarImageV = (ImageView) findViewById(R.id.star_image_view);
+        //tie this into the liveData selector
+        mStarImageV = findViewById(R.id.star_image_view);
 
         mFavoriteViewModel = ViewModelProviders.of(this).get(FavoriteViewModel.class);
 
 
         final FavoriteRoomDatabase mdb = FavoriteRoomDatabase.getDatabase(getApplication());
 
-        //sommme reallly badddd code
-        /*
-
-
-
-         */
 
         factory = new AddFavoriteViewModelFactory(mdb,movie.getMovieApiID());
         viewModel = ViewModelProviders.of(this, factory).get(AddFavoriteViewModel.class);
@@ -136,7 +127,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
             @Override
             public void onClick(View v) {
 
-                ImageView favoriteIcon = (ImageView) findViewById(R.id.star_image_view);
+                ImageView favoriteIcon = findViewById(R.id.star_image_view);
                 if (favoriteIcon.isSelected()){
 
                     FavoriteEntry favoriteEntry = viewModel.getFavorite().getValue();

@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
         movieAdapter = new MovieAdapter(this);
         GridLayoutManager gridLayoutManagerMovie = new GridLayoutManager(this, 2);
 
-        movieRecyclerView = (RecyclerView) findViewById(R.id.rv_posters);
+        movieRecyclerView = findViewById(R.id.rv_posters);
         movieRecyclerView.setLayoutManager(gridLayoutManagerMovie);
         movieRecyclerView.setHasFixedSize(true);
 
@@ -167,7 +167,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
             searchQueryResult = getResponseFromHttpURL(searchUrl);
 
             Log.d(MainActivity.class.getSimpleName(), "Getting API data from URL: "+searchUrl);
-            Log.d(MainActivity.class.getSimpleName(), "API's JSON data results: "+searchQueryResult);
             return searchQueryResult;
         }
 
@@ -231,7 +230,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
         ArrayList<Movie> movieList = new ArrayList<>();
         try {
             for (int i = 0; i < results.length(); i++) {
-                Log.d(MainActivity.class.getSimpleName(), results.getJSONObject(i).get("title").toString());
 
                 JSONObject movieObj = results.getJSONObject(i);
 
