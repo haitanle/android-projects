@@ -19,9 +19,26 @@ public class FavoriteEntry implements Parcelable {
     @ColumnInfo(name="movie_title")
     private String movieTitle;
 
-    public FavoriteEntry(String apiId, String movieTitle) {
+    @ColumnInfo(name="image_path")
+    private String imagePath;
+
+    @ColumnInfo(name="synopsis")
+    private String synopsis;
+
+    @ColumnInfo(name="user_rating")
+    private String userRating;
+
+    @ColumnInfo(name="release_date")
+    private String releaseDate;
+
+
+    public FavoriteEntry(String apiId, String movieTitle, String imagePath, String synopsis, String userRating, String releaseDate) {
         this.apiId = apiId;
         this.movieTitle = movieTitle;
+        this.imagePath = imagePath;
+        this.synopsis = synopsis;
+        this.userRating = userRating;
+        this.releaseDate = releaseDate;
     }
 
     public int getId() {
@@ -48,6 +65,37 @@ public class FavoriteEntry implements Parcelable {
         this.movieTitle = movieTitle;
     }
 
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
+    public String getSynopsis() {
+        return synopsis;
+    }
+
+    public void setSynopsis(String synopsis) {
+        this.synopsis = synopsis;
+    }
+
+    public String getUserRating() {
+        return userRating;
+    }
+
+    public void setUserRating(String userRating) {
+        this.userRating = userRating;
+    }
+
+    public String getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
+    }
 
     /**
      *Functions to handle Parcelable
@@ -62,12 +110,20 @@ public class FavoriteEntry implements Parcelable {
         dest.writeInt(this.id);
         dest.writeString(this.apiId);
         dest.writeString(this.movieTitle);
+        dest.writeString(this.imagePath);
+        dest.writeString(this.synopsis);
+        dest.writeString(this.userRating);
+        dest.writeString(this.releaseDate);
     }
 
     protected FavoriteEntry(Parcel in) {
         this.id = in.readInt();
         this.apiId = in.readString();
         this.movieTitle = in.readString();
+        this.imagePath = in.readString();
+        this.synopsis = in.readString();
+        this.userRating = in.readString();
+        this.releaseDate = in.readString();
     }
 
     public static final Creator<FavoriteEntry> CREATOR = new Creator<FavoriteEntry>() {
@@ -81,4 +137,7 @@ public class FavoriteEntry implements Parcelable {
             return new FavoriteEntry[size];
         }
     };
+
+
+
 }

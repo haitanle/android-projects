@@ -144,7 +144,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
 
 
                 }else{
-                    FavoriteEntry favoriteMovie = new FavoriteEntry(movie.getMovieApiID(), movie.getTitle());
+                    FavoriteEntry favoriteMovie = new FavoriteEntry(movie.getMovieApiID(), movie.getTitle(), movie.getImageUrl(), movie.getSynopsis(), movie.getUserRating(), movie.getReleaseDate());
                     mFavoriteViewModel.insert(favoriteMovie);
                 }
 

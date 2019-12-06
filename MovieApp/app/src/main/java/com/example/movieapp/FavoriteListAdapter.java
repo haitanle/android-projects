@@ -1,6 +1,7 @@
 package com.example.movieapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.util.MalformedJsonException;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.movieapp.database.FavoriteEntry;
+import com.example.movieapp.model.Movie;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -25,16 +27,33 @@ import java.util.List;
 
 public class FavoriteListAdapter extends RecyclerView.Adapter<FavoriteListAdapter.FavoriteViewHolder> {
 
-    class FavoriteViewHolder extends RecyclerView.ViewHolder{
+    class FavoriteViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private final ImageView favoriteItemView;
 
         private FavoriteViewHolder(View itemView){
             super(itemView);
             favoriteItemView = (ImageView) itemView.findViewById(R.id.favorite_iv);
+            itemView.setOnClickListener(this);
         }
 
         public void bind(String posterId){
             Picasso.get().load(posterId).into(favoriteItemView);
+        }
+
+        /**
+          * Send intent detailActivity for Favorite movie
+          * @param v
+         */
+        @Override
+        public void onClick(View v) {
+            int clickPosition = getAdapterPosition();
+            FavoriteEntry favoriteEntry = mFavorites.get(clickPosition);
+
+            Movie movie = new Movie(favoriteEntry.getApiId(), favoriteEntry.getMovieTitle(), favoriteEntry.getImagePath(), favoriteEntry.getSynopsis(), favoriteEntry.getUserRating(), favoriteEntry.getReleaseDate());
+
+            Intent intent = new Intent(v.getContext(), DetailActivity.class);
+            intent.putExtra(Intent.EXTRA_TEXT, movie);
+            v.getContext().startActivity(intent);
         }
     }
 
